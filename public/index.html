@@ -2,10 +2,21 @@
 <html lang="en">
   <head>
     <meta charset="utf-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width,initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- <meta name="viewport" content="initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no, width=device-width"> -->
     <link rel="icon" href="<%= BASE_URL %>favicon.ico">
     <title>my-project</title>
+    <script src="http://g.tbcdn.cn/mtb/lib-flexible/0.3.4/??flexible_css.js,flexible.js"></script>
+    <script type="text/javascript" src="http://api.map.baidu.com/api?v=2.0&ak=PIvUCvE1HdkGb6baKec54Ikp3EUNtgb9"></script>
+    <script src="http://libs.baidu.com/jquery/1.9.0/jquery.js"></script> 
+    <link rel="stylesheet" href="http://at.alicdn.com/t/font_1491760_y9450v8nv2.css">
+    <style>
+      html,body{
+        margin:0;
+        padding:0;
+        height: 100%;
+        width: 100%;
+        }</style>
   </head>
   <body>
     <noscript>
@@ -14,4 +25,42 @@
     <div id="app"></div>
     <!-- built files will be auto injected -->
   </body>
+  <!-- <script>
+    //获取屏幕宽度(viewport)
+		let htmlWidth = document.documentElement.clientWidth ||
+			document.body.clientWidth;
+		console.log(htmlWidth);
+		//获取htmlDom
+		let htmlDom = document.getElementsByTagName('html')[0];
+		//设置html的font-size
+		htmlDom.style.fontSize = htmlWidth/10+'px';
+		
+		window.addEventListener('resize',(e)=>{
+			let htmlWidth = document.documentElement.clientWidth ||
+			document.body.clientWidth;
+			console.log(htmlWidth);
+			//获取htmlDom
+			let htmlDom = document.getElementsByTagName('html')[0];
+			//设置html的font-size
+			htmlDom.style.fontSize = htmlWidth/10+'px';
+		})
+  </script> -->
+  <!-- <script>
+    //利用原生js动态改变html的fontSize
+    (function(){
+        console.log(document.body.offsetWidth);
+        console.log(window.innerWidth)
+        var designW = 750;  //设计稿宽
+        var font_rate = 100;
+        //适配
+        document.getElementsByTagName("html")[0].style.fontSize = document.body.offsetWidth / designW * font_rate + "px";
+        document.getElementsByTagName("body")[0].style.fontSize = document.body.offsetWidth / designW * font_rate + "px";
+
+        //监测窗口大小变化
+        window.addEventListener("onorientationchange" in window ? "orientationchange" : "resize", function() {
+            document.getElementsByTagName("html")[0].style.fontSize = document.body.offsetWidth / designW * font_rate + "px";
+            document.getElementsByTagName("body")[0].style.fontSize = document.body.offsetWidth / designW * font_rate + "px";
+        }, false);
+    })();
+</script> -->
 </html>
