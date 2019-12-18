@@ -1,5 +1,5 @@
 <template>
-    <div class="loginContainer" :style="contentStyleObj">
+    <div class="loginContainer login-bg" :style="contentStyleObj">
         <div class="loginInner">
             <div class="login_hearder">
                 <h2 class="login_logo">互助</h2>
@@ -62,7 +62,7 @@ export default {
     .loginContainer
         overflow hidden
         background-color #ffffff
-        background-image url('../assets/images/loginImg.jpg')
+        // background-image url('../assets/images/loginImg.jpg')
         background-size: cover
         height: 100%;
         width: 100%;

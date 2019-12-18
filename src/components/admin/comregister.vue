@@ -238,6 +238,9 @@ export default {
      /deep/ .el-button--primary
         background-color: #4cd96f
         border-color: #4cd96f;
+    /deep/ .el-form-item__error {
+        color: #6cf570d1;
+    }
     .get_verification
         border 0px 
         float right 
@@ -277,5 +280,6 @@ export default {
         -webkit-backface-visibility: hidden;
         backface-visibility: hidden;
     }
+
 </style>
 

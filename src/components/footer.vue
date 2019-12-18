@@ -10,11 +10,11 @@
       <span>首页</span>
     </div>
 
-    <div class="guide_item" @click="goto('/calendar')" :class="{on:isCurrent('/calendar')}">
+    <div class="guide_item" @click="goto('/clockin')" :class="{on:isCurrent('/clockin')}">
       <span class="item_icon">
         <i class="iconfont icon-gongzuotai"></i>
       </span>
-      <span>行程</span>
+      <span>动态</span>
     </div>
 
     <div class="guide_item" @click="goto('/news')" :class="{on:isCurrent('/news')}">
@@ -54,13 +54,10 @@
     top-border-1px(#e4e4e4)
     position fixed
     z-index 100
-    left 0
-    right 0
     bottom 0px
-    background-color: #c7c7c70d;
     width 100%
-    height 1.5rem
-    display flex
+    display: flex;
+    background #ffffff
     .guide_item
       display flex
       flex 1

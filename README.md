@@ -47,3 +47,5 @@ See [Configuration Reference](https://cli.vuejs.org/config/).
 - 2、百度地图的使用，点击时间，信息弹框的显示与隐藏
 - 3、>>>深度选择器,在原生<style scoped>中才起作用
 可以使用组合/deep/或::v-deep组合 - 两者都是别名，>>>并且工作完全相同
+- 4、背景颜色渐变 linear-gradient(red, yellow, blue)
+background: linear-gradient(to bottom,  #A46E92 0%,#27455D 100%);（左上角到右下角的线性渐变）

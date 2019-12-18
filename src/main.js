@@ -6,7 +6,6 @@ import ElementUI from 'element-ui';
 import 'element-ui/lib/theme-chalk/index.css';
 import MintUI from 'mint-ui'
 import 'mint-ui/lib/style.css'
-import 'lib-flexible'
 import './plugins/rem.js'
 
 // rem
@@ -14,18 +13,18 @@ import "./js/flexible"
 //导入字体样式
 import "./assets/stylus/styles/fontstyle.css"
 import "./assets/stylus/styles/index.styl"
-
+// 引入图片查看器
+// 移动端Vue.js图片预览插件
+import preview from 'vue-photo-preview'
+import 'vue-photo-preview/dist/skin.css'
+Vue.use(preview, {
+  fullscreenEl: false, // 关闭全屏按钮
+  zoomEl: false, //控制是否显示放大缩小按钮
+})
 Vue.use(ElementUI);
 Vue.use(MintUI);
 Vue.config.productionTip = false;
 
-// window.onresize = setHtmlFontSize;
-// function setHtmlFontSize(){
-//     const htmlWidth = document.documentElement.clientWidth || document.body.clientWidth;
-//     const htmlDom = document.getElementsByTagName('html')[0];
-//     htmlDom.style.fontSize = htmlWidth / 10 + 'px';
-// };
-// setHtmlFontSize();
 new Vue({
   router,
   store,

@@ -1,8 +1,8 @@
 <template>
   <div id="detailHome">
-    <HeaderTop title="首页">
+    <HeaderTop title="前端开发">
       <!-- title为岗位 -->
-      <router-link to="/" slot="left" class="left">
+      <router-link to="/home" slot="left" class="left">
         <span>
           <i class="iconfont icon-fanhui1"></i>
         </span>
@@ -122,12 +122,11 @@ span.tips2 {
   left: 0.2rem;
   position: absolute;
   top: 0.1rem;
-
-  i.iconfont.icon-fanhui1 {
-    font-size: 0.8rem;
-    color: #565252;
-  }
 }
+    i.iconfont.icon-fanhui1 {
+      font-size: 0.8rem;
+      color: #ffffff;
+    }
 
 .job_content {
   margin-top: 1rem;

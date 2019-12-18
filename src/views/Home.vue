@@ -1,11 +1,6 @@
 <template>
     <div id="home">
         <HeaderTop title="首页">
-             <router-link to="/" slot="left" class="left">
-                <span>
-                    <i class="iconfont icon-fanhui"></i>
-                </span>
-             </router-link>
         </HeaderTop>
         <ul
             v-infinite-scroll="loadMore"
@@ -42,7 +37,10 @@
                 </section>
             </li>
         </ul>
-        <!-- <ul class="mui-table-view" v-infinite-scroll="loadMore" infinite-scroll-disabled="moreLoading" infinite-scroll-distance="0" infinite-scroll-immediate-check="false"> -->
+        <div v-show="loading" class="page-infinite-loading">
+            <mt-spinner type="fading-circl e "></mt-spinner>客官您滑慢点...                              
+        </div>
+        <!-- <ul class="mui-table-view" v-inf sainite-scroll="loadMore" infinite-scroll-disabled="moreLoading" infinite-scroll-distance="0" infinite-scroll-immediate-check="false"> -->
             <!--li数据遍历循环部分-->
             <!-- <li class="mui-table-view-cell" v-for="item in list">
                 <a class="mui-navigate-right">
@@ -60,6 +58,9 @@
 </template>
 
 <style lang="stylus" scoped>
+#home{
+    background :#e9efef;
+}
     .left
         left: 0.2rem;
         position: absolute;
@@ -69,14 +70,11 @@
             color: white;
         }
     ul{
-        border: 2px solid;
         margin-top: 1rem;
-        background-color #cccccc2b
-        height: 15.1rem;
         overflow-x: hidden;
         overflow-y: scroll;
-        position: fixed;
-        width: 99%;
+        position: relative;
+        width: 100%;
     }
     ul::-webkit-scrollbar{
         display: none;
@@ -84,7 +82,7 @@
         li {
             height: 3.5rem;
             width: 100%;
-            background-color: #ffffffa8
+            background-color: #ffffff
             margin-bottom: 0.3rem;
         }
            .job_information_top {
@@ -97,7 +95,6 @@
                         padding-left: 0.6rem;
                         padding-top: 0.4rem;
                         width: 50%;
-                        height: 0.8rem;
                         text-align: left;
                         color: #101f1fd4;
                 }
@@ -132,9 +129,12 @@
                     }
             section.hr_information {
                 text-align: left;
+                margin-right: 0.5rem;
                 margin-left: 0.5rem;
-                    display: flex;
-                    margin-top: 0.1rem;
+                margin-top: 0.1rem;
+                padding-top: 0.1rem;
+                display: flex;
+                border-top: 1px solid #e4e4e4;
             }
                 img {
                     width: 0.7rem;
@@ -158,7 +158,7 @@
 import HeaderTop from "../components/HeaderTop"
 export default {
     components:{
-        HeaderTop
+        HeaderTop,
     },
     data() {
         return {
@@ -169,6 +169,8 @@ export default {
             totalNum: 0,//总数
             pageSize: 10,//页面长度
             pageNum: 1,//从页面为1的开始
+            loading:false,//控制加载显示
+            temp:[],//获取加载更多工作数据
             list:[
                 {
                     post:"前端开发1111222222",
@@ -192,41 +194,111 @@ export default {
                     hr_name:"招聘者名称",
                     hr_duty:"招聘者职务"
                 },
+                {
+                    post:"前端开发",
+                    company:"公司名称",
+                    salary:"工资",
+                    sist:"地点",
+                    ask_for:"要求",
+                    ask_educat:"本科",
+                    hr_img:"招聘者头像",
+                    hr_name:"招聘者名称",
+                    hr_duty:"招聘者职务"
+                },
+                {
+                    post:"前端开发",
+                    company:"公司名称",
+                    salary:"工资",
+                    sist:"地点",
+                    ask_for:"要求",
+                    ask_educat:"本科",
+                    hr_img:"招聘者头像",
+                    hr_name:"招聘者名称",
+                    hr_duty:"招聘者职务"
+                },
+                {
+                    post:"前端开发",
+                    company:"公司名称",
+                    salary:"工资",
+                    sist:"地点",
+                    ask_for:"要求",
+                    ask_educat:"本科",
+                    hr_img:"招聘者头像",
+                    hr_name:"招聘者名称",
+                    hr_duty:"招聘者职务"
+                },
+                {
+                    post:"前端开发",
+                    company:"公司名称",
+                    salary:"工资",
+                    sist:"地点",
+                    ask_for:"要求",
+                    ask_educat:"本科",
+                    hr_img:"招聘者头像",
+                    hr_name:"招聘者名称",
+                    hr_duty:"招聘者职务"
+                },
             ]
         }
     },
     methods:{
+        // 加载更多数据
+        loadData(){
+                let _this=this;
+                // 数据请求获取数据
+                this.$http.get(_this.apiUrl)
+                    .then(response => {
+                        if(response.data.code=="0"){
+                            _this.list=response.data.main;
+                            // 模擬每次下拉加載的10條假數據
+                            _this.temp=response.data.main;
+                            // console.log(response.data);
+                        }
+                    })
+                    .catch(error => {
+                        console.log(error);
+                });
+            },
+        // 模擬無限下拉加載
+        loadMore() {
+            this.loading = true;
+            setTimeout(() => {
+                this.list=this.list.concat(this.temp);
+                this.loading = false;
+                // console.log(this.jobs);
+            }, 2500);
+        },
         // 路由跳转
         toDetailHome(){
             this.$router.push({path:'/home/detailHome'})
         },
         //无限加载函数
-      loadMore() {
-        if(this.allLoaded){
-          this.moreLoading = true;
-          return;
-        }
-        if(this.queryLoading){
-          return;
-        }
-        this.moreLoading = !this.queryLoading;
-        this.pageNum++;
-        // this.$http.post("请求后台数据的接口",Object.assign({pageNum:this.pageNum},this.params)).then((res) => {
-        //   if(res.sData && res.sData.list){
-        //     this.list = this.list.concat(res.sData.list);
-        //     this.allLoaded = this.debtList.length==this.totalNum;
-        //   }
-        //   this.moreLoading = this.allLoaded;
-        // });
-          if(list){
-            this.list = this.list.concat(res.sData.list);
-            this.allLoaded = this.debtList.length==this.totalNum;
-          }
-          else{
-            this.moreLoading = this.allLoaded;
-          }
+    //   loadMore() {
+    //     if(this.allLoaded){
+    //       this.moreLoading = true;
+    //       return;
+    //     }
+    //     if(this.queryLoading){
+    //       return;
+    //     }
+    //     this.moreLoading = !this.queryLoading;
+    //     this.pageNum++;
+    //     // this.$http.post("请求后台数据的接口",Object.assign({pageNum:this.pageNum},this.params)).then((res) => {
+    //     //   if(res.sData && res.sData.list){
+    //     //     this.list = this.list.concat(res.sData.list);
+    //     //     this.allLoaded = this.debtList.length==this.totalNum;
+    //     //   }
+    //     //   this.moreLoading = this.allLoaded;
+    //     // });
+    //       if(list){
+    //         this.list = this.list.concat(res.sData.list);
+    //         this.allLoaded = this.debtList.length==this.totalNum;
+    //       }
+    //       else{
+    //         this.moreLoading = this.allLoaded;
+    //       }
          
-      }
+    //   }
     },
     
 }

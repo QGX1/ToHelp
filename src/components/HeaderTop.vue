@@ -2,9 +2,7 @@
     <div>
         <header class="header">
             <slot name="left"></slot>
-            <span class="header_title">
-                <span class="header_title_text ellipsis">{{title}}</span>
-            </span>
+             <span class="header_title_text ellipsis">{{title}}</span>
             <slot  name="right" class="right"></slot>
         </header>
     </div>
@@ -28,16 +26,11 @@ export default {
         left 0
         top 0
         width 100%
-    .header_title
-        margin-left 45%
     .header_title_text 
-        text-align: center;
         display: block;
-        width: 50%;
-        margin-left: -0.5rem;
-        vertical-align: middle;
-        font-size: 20px;
-        margin-top: -0.1rem;
+        font-size: 0.6rem;
+        margin-top: 0.2rem;
+        color: #fff;
 </style>
 
 

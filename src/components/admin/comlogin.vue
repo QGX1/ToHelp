@@ -25,6 +25,7 @@
             </div>
             <input type="submit" value="登录" class="login_submit">
         </form>
+        <br/>
         <a href="javascript:;" class="about_us" @click="inputEmail">忘记密码</a>
     </div>
 </template>
