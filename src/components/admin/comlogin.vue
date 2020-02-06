@@ -20,7 +20,7 @@
                 </section>
                 <section class="login_message">
                     <el-input type="text" maxlength="11" placeholder="验证码" v-model="captcha"></el-input>
-                    <!-- <img ref="captcha" class="get_verification" src=" http://172.16.221.16:7001/api/verify" @click="getCaptchaCode"> -->
+                    <img ref="captcha" class="get_verification" src=" http://192.168.43.177:5001/api/user/verify" @click="getCaptchaCode">
                 </section>
             </div>
             <input type="submit" value="登录" class="login_submit">
@@ -31,7 +31,8 @@
 </template>
 
 <script>
-import {MessageBox,Loading} from 'element-ui'
+import {MessageBox,Loading} from 'element-ui';
+import {mapActions} from 'Vuex';
 export default {
     data(){
         return{
@@ -43,6 +44,7 @@ export default {
         }
     },
     methods: {
+        ...mapActions(['checkEmail']),
         // 输入邮箱
         inputEmail(){
             this.$prompt('请输入邮箱', '提示', {
@@ -52,16 +54,25 @@ export default {
             inputErrorMessage: '邮箱格式不正确'
             }).then(({ value }) => {
                 // 发送请求邮箱请求
+                this.$message({
+                        type: 'success',
+                        message: '你的邮箱是: ' + value
+                });
+                let emailValue={
+                    email:value,
+                    user_limit:1
+                }
+                this.checkEmail(emailValue).then(res=>{
+                  //  console.log('邮箱');
+                 //   console.log(res)
+                })
                 // 返回状态
-            this.$message({
-                type: 'success',
-                message: '你的邮箱是: ' + value
-            });
+                 
             }).catch(() => {
-            this.$message({
-                type: 'info',
-                message: '取消输入'
-            });       
+                this.$message({
+                    type: 'info',
+                    message: '取消输入'
+                });       
             });
         },
         // 消息提示弹框
@@ -77,41 +88,40 @@ export default {
         login(){
             let that=this;
             // 登录成功后跳转到主页面
-            // try{
-            //      // 发送登录请求
-            //     that.$store.dispatch("toLogin",{
-            //             user_email:that.user_email,
-            //             user_password:that.user_password,
-            //             captcha:that.captcha
-            //         })
-            //         // 请求成功
-            //         .then(res=>{
-            //             console.log(res)
-            //             if(res.data.code===1){
-            //                 that.$options.methods.open(res.data.msg)
-            //             }                   
-            //             // 存储用户信息到状态管理
-            //             that.$store.dispatch('getUser',{
-            //                 info:res.data.info
-            //             })
-            //             // 路由跳转到首页
-            //             .then((res)=>{
-            //                 console.log(res)
-                            let redirectUrl = decodeURIComponent(that.$route.query.redirect || '/home');
-            //                 // 跳转到指定的路由
-                            that.$router.push({
-                                path: redirectUrl
-                            })
-            //             })
-            //     })
+            try{
+                 // 发送登录请求
+                that.$store.dispatch("toLogin",{
+                        user_email:that.user_email,
+                        user_password:that.user_password,
+                        user_limit:1,
+                        captcha:that.captcha
+                    })
+                    // 请求成功
+                    .then(res=>{
+                        if(res=='USERINFO'){
+                            that.getCaptchaCode()//刷新验证码
+                             // 路由跳转到首页
+                                let redirectUrl = decodeURIComponent(that.$route.query.redirect || '/home');
+                             // 跳转到指定的路由
+                                that.$router.push({
+                                    path: redirectUrl
+                                })
+                            that.getCaptchaCode()//刷新验证码
+                        }else{
+                            // 登陆失败
+                            that.captcha='';
+                            that.$options.methods.open(res.data.msg);
+                            that.getCaptchaCode()//刷新验证码
+                        }                  
+                })
                 
-            // }catch(err){
-            //     console.log(err)
-            // }
+            }catch(err){
+               throw err
+            }
         },
         // 点击获取验证码
         getCaptchaCode(){
-            // this.$refs.captcha.src=' http://172.16.221.16:7001/api/verify?time='+new Date();
+            this.$refs.captcha.src=' http://192.168.43.177:5001/api/user/verify?time='+new Date();
         }
 
     },
@@ -164,7 +174,6 @@ export default {
                     .get_verification
                         position absolute
                         right 40px
-                        top 50%
                         border 0
                         color #ccc
                         font-size 14px

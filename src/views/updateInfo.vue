@@ -12,21 +12,21 @@
             <br/>
             <br/>
             <div class="userInfo" >
-                <section class="userAvatar">
-                    <span class="cell-title">头像</span>
+                <section class="userAvatar" @click="$router.push({name:'updataUserAvatar'})">
+                    <span class="cell-title" >头像</span>
                     <i class="iconfont icon-icon-test2 infoContent" ></i>
-                    <img class="avatar infoContent" src="https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1573017585034&di=73d85c084764c80e5eac6d0f76abf5d4&imgtype=0&src=http%3A%2F%2Fcdn.duitang.com%2Fuploads%2Fitem%2F201610%2F03%2F20161003145053_X25ky.jpeg" alt="用户头像" />  
+                    <img class="avatar infoContent" :src='userInfo.user_avatar' alt="用户头像" />  
                 </section>
                 <section class="userContent">
                     <div @click="$router.push({name:'updateusername'})">
                         <update-cell title='昵称'>
                             <i class="iconfont icon-icon-test2 infoContent" slot="left"></i>
-                            <span slot="right" class="infoContent">小胖子</span>
+                            <span slot="right" class="infoContent">{{userInfo.user_name}}</span>
                         </update-cell>
                     </div>
                     <div  @click="updateStatus">
                         <update-cell title='在职状态'>
-                            <span slot="right" class="infoContent">{{jobStatus}}</span>
+                            <span slot="right" class="infoContent">{{userInfo.user_incumbency===1?'随时到岗':'在职'}}</span>
                         </update-cell>
                     </div>
                     
@@ -44,6 +44,8 @@
 <script>
 import HeaderTop from "../components/HeaderTop";
 import updateCell from "../components/mine/updateCell";
+import {mapActions,mapState} from 'Vuex';
+import {updateUserInfo} from '../api/index'
 export default {
     name:'updateInfo',
     components:{
@@ -66,8 +68,16 @@ export default {
         ],
         }
     },
+    mounted() {
+      //  console.log(this)
+    },
+    computed: {
+        ...mapState(['userInfo']),
+    },
     // 下一步：页面初始化，将用户信息渲染
     methods: {
+        ...mapActions(['getUser']),
+        
         // 更新用户姓名
         updateUserName(){
 
@@ -75,15 +85,25 @@ export default {
         updateStatus(){
             this.userStatusVisible=true;
         },
-        getUserStatus(){ 
-            console.log("用户状态:随时到岗")
-            // 下一步：修改用户状态
-            this.jobStatus='随时到岗'
+        async getUserStatus(){ 
+            // 下一步：修改用户在职状态
+            let newUser=this.userInfo;
+            if(newUser.user_incumbency!=1){
+                newUser.user_incumbency=1;
+            }
+            let resUpdata=await updateUserInfo(newUser);
+          //  console.log(resUpdata)
         },
-        getUserStatus2(){ 
-            console.log("用户状态：在职")
-            // 下一步：修改用户状态
-            this.jobStatus='在职'
+        async getUserStatus2(){ 
+            // 下一步：修改用户在职状态
+            let newUser=this.userInfo;
+          //  console.log(newUser.user_incumbency)
+            if(newUser.user_incumbency!=2){
+                newUser.user_incumbency=2;   
+            }
+            // console.log(newUser)
+            let resUpdata=await updateUserInfo(newUser);
+          //  console.log(resUpdata)
         },
         toMine(){
             // 下一步：将用户的在值状态存入数据库

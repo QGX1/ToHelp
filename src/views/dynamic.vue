@@ -1,24 +1,22 @@
 <template>
-    <div id="clockIn" @click="hide">
-        <HeaderTop title="动态">
-           <div slot="left" class="left" @click.prevent="cancelCom" v-show="showComment">
+    <div id="dynamic" @click="hide">
+        <HeaderTop title="分享">
+            <!-- <router-link slot="left" class="left" to='/mine'>
                 <span>
                     <i class="iconfont icon-fanhui1"></i>
                 </span>
-            </div>
+            </router-link> -->
+           <!-- <div slot="left" class="left" @click.prevent="cancelCom" v-show="showComment">
+                <span>
+                    <i class="iconfont icon-fanhui1"></i>
+                </span>
+            </div> -->
             <router-link slot="right" class="writeDynamic" to='/writeDynamic'>
                 <span>
                     <i class="iconfont icon-fabiaoyouji2-copy"></i>
                 </span>
             </router-link>
         </HeaderTop>
-        <SendComment 
-            :dynamicId='dynamicId'
-            :reply='reply'
-            :v-show="showComment" 
-            :class="{sendCom:showComment}"
-            @hideShow='hideShow'
-            ></SendComment>
         <div class="issue mui-table-view" 
             v-infinite-scroll="loadMore" infinite-scroll-disabled="true" 
             infinite-scroll-distance="0" infinite-scroll-immediate-check="false">
@@ -37,7 +35,6 @@
                                 :preview='item.dynamic_imgs'
                                 :preview-text='item.dynamic_text'
                                 />
-                                <!-- {{items.length}} -->
                             </div>
                         </article>
                     </div>
@@ -57,7 +54,7 @@
                                 <span v-if="item.i_like" style="color:#ffffff">赞</span>
                                 <span v-else style="color:#ffffff">取消</span>
                             </span>
-                            <span @click.stop="userComment(item._id)">
+                            <span @click.stop="userComment(index)">
                                 <!-- <img src="../assets/images/comment.png" alt="评论"/> -->
                                 <i class="iconfont icon-pinglun1"></i>
                                 评论
@@ -65,37 +62,45 @@
                         <!-- </div> -->
                         </div>
                     </transition>
-                    <div class="likeTotal" v-if="item.is_like_lists">
-                        <span><i class="iconfont icon-dianzan"></i></span>
-                        <span v-for="listItem of item.likes.like_list" :key='listItem.id'>
-                            {{listItem.users.user_name}},
-                        </span>
-                    </div>
-                    <div class="likeTotal" v-if="item.is_comments_lists">
-                        <div v-for="commentItem in item.comments.comment_list" 
-                        :key='commentItem._id'
-                         @click="userComment2(commentItem,item.comments.dynamic_id)"
-                         style="line-height: 130%;margin-top: 0.1rem"
-                        >
-                            <span>
-                                {{commentItem.user_name}}
+                    <div style="clear: both;width: 100%;">
+                        <div class="likeTotal" v-if="item.is_like_lists">
+                            <span><i class="iconfont icon-dianzan"></i></span>
+                            <span v-for="listItem of item.likes.like_list" :key='listItem.id'>
+                                {{listItem.users.user_name}},
                             </span>
-                            <span class='commentText' v-if="commentItem.comment_reply_id">
-                                回复
-                            </span>
-                            <span v-if="commentItem.comment_reply_id">
-                                {{commentItem.comment_reply_name}}
-                            </span>
-                            <span class='commentText'>
-                                :{{commentItem.comment_text}}
-                            </span>
+                        </div>
+                        <div class="likeTotal" v-if="item.is_comments_lists">
+                            <div v-for="commentItem in item.comments.comment_list" 
+                            :key='commentItem._id'
+                            @click.stop="userComment2(commentItem,index)"
+                            style="line-height: 130%;margin-top: 0.1rem"
+                            >
+                                <span>
+                                    {{commentItem.user_name}}
+                                </span>
+                                <span class='commentText' v-if="commentItem.comment_reply_id">
+                                    回复
+                                </span>
+                                <span v-if="commentItem.comment_reply_id">
+                                    {{commentItem.comment_reply_name}}
+                                </span>
+                                <span class='commentText'>
+                                    :{{commentItem.comment_text}}
+                                </span>
+                                
+                            </div>
                             
                         </div>
-                        
+                        <div class="likeTotal" v-show="item.showComment">
+                            <SendComment
+                                :dynamicId='dynamicId'
+                                :reply='reply'
+                                @hideShow='hideShow'
+                            ></SendComment>
+                        </div>
                     </div>
-                    
+                    <!--底部判断是加载图标还是提示“全部加载”-->
                 </div>
-                <!--底部判断是加载图标还是提示“全部加载”-->
             </div>
             <div class="more_loading" v-show="!queryLoading">
                 <mt-spinner type="fading-circle" color="#40b490" :size="30" v-show="moreLoading&&!allLoaded"></mt-spinner>
@@ -108,16 +113,16 @@
 <script>
 import {mapState,mapActions} from 'Vuex';
 import HeaderTop from "../components/HeaderTop";
-import SendComment from "../components/comment/sendComment";
+import SendComment2 from "../components/comment/sendComment2";
 import {addLike,deleteLike} from '../api/index'
 import Vue from "vue";
 // import func from './vue-temp/vue-editor-bridge';
 export default {
-    name:'clockin',
+    name:'dynamic',
     inject:['reload'],//注入依赖
     components:{
         HeaderTop,
-        SendComment
+        SendComment:SendComment2
     },
     data() {
         return {
@@ -137,13 +142,6 @@ export default {
             user_id:''
         }
     },
-    // beforeRouteEnter(to, from, next) {
-    //     next(vm => {
-    //         // vm.targetUser = to.params.user;
-    //         // vm.getMessage();
-    //         vm.handleDynamicData({nextNum:vm.nextNum,preNum:vm.preNum,_id:''})
-    //     });
-    // },
     created() {
         // console.log(this.userInfo)
         this.user_id=this.userInfo._id?this.userInfo._id:this.userInfo.id;
@@ -185,6 +183,7 @@ export default {
                 this.totalNum=res;
                 // console.log(this.totalNum)
                 let newDynamicList=this.dynamicLists.map((item,index)=>{
+                item.showComment=false;
                 item.isShowLike=false;
                 item.is_like_lists=false;
                 item.is_comments_lists=item.comments&&item.comments.comment_list.length>0? true:false
@@ -219,39 +218,39 @@ export default {
                 }
             })
         },
-        // 点击隐藏区块 
+        // 点击隐藏点赞-评论区块 
         hide(){
-            if(document.getElementsByClassName('right')[0]){
-                document.getElementsByClassName('right')[0].style.display='none';
+            let index=this.dynamicLists2.findIndex(item=>{
+                return item.isShowLike==true;
+            })
+            // console.log(111,index)
+            if(index>=0){
+                Vue.set(this.dynamicLists2[index],'isShowLike',false);
+                this.dynamicLists2.splice(index,1,this.dynamicLists2[index]);
             }
         },
-        //控制评论区块
+        //控制评论区输入框
         userComment(value){
-             this.$route.meta.showFooter=false;
-             this.showComment=true;
-             this.dynamicId=value;
-            //  console.log(this.dynamicId)
-            //  this.reload();
+            //  console.log('kkk',value)
+             Vue.set(this.dynamicLists2[value],'isShowLike',false)
+             Vue.set(this.dynamicLists2[value],'showComment',true)
+             this.dynamicLists2.splice(value,1,this.dynamicLists2[value])
+            this.dynamicLists2.forEach((item,index)=>{ 
+                if(index!=value){
+                    item.showComment=false;
+                }
+            })
+             this.dynamicId=this.dynamicLists2[value]._id;
         },
-        userComment2(value,dynamicId){
-            console.log(888,value,dynamicId)
-             this.$route.meta.showFooter=false;
-             this.showComment=true;
-             this.dynamicId=dynamicId;
+        userComment2(value,index){
+            // console.log(888,value,index)
+             this.dynamicId=this.dynamicLists2[index]._id;
+             let newIndex=index;
              this.reply={
                  comment_reply_id:value.user_id,
                  comment_reply_name:value.user_name
              }
-             console.log(999,this.reply)
-        },
-        /**
-         * 取消评论
-         */
-        cancelCom(){
-            console.log(222)
-            this.showComment=false;
-            this.dynamicId='';
-            this.$route.meta.showFooter=true;
+             this.userComment(newIndex);
         },
         // 1、【完成】控制显示‘赞’或‘取消’
         // 2、【完成】将用户的的id、动态id存入数据库中，或push到user_like_lists中
@@ -334,9 +333,37 @@ export default {
          * 此函方法的参数是用来接收从子组件传递来的数据
          */
         hideShow(value){
-            console.log(777,value)
-            this.showComment=value.showComment
-            this.reload();
+            let sendValue=value.value;
+            console.log(777,sendValue.dynamic_id);
+            this.dynamicLists2.forEach((item,index)=>{
+                console.log(item._id,sendValue.dynamic_id)
+                if(item._id==sendValue.dynamic_id){
+                    console.log(111);
+                    Vue.set(this.dynamicLists2[index],'showComment',false);
+                    if(item.comments&&item.comments.comment_list.length){
+                        console.log(222)
+                        Vue.set(this.dynamicLists2[index],'showComment',false);
+                        item.comments.comment_list.push(sendValue.comment_list);
+                    }else{
+                        //console.log(333)
+                        let newValue=sendValue.comment_list;
+                        console.log(444,newValue)
+                        let comments={
+                            dynamic_id:sendValue.dynamic_id,
+                            comment_list:[
+                                newValue
+                            ]
+                        }
+                        Vue.set(this.dynamicLists2[index],'is_comments_lists',true);
+                        Vue.set(this.dynamicLists2[index],'comments',comments);
+                        Vue.set(this.dynamicLists2[index],'showComment',false);
+                        this.dynamicLists2.splice(index,1,this.dynamicLists2[index]);
+                        // console.log(this.dynamicLists2[index])                     
+                    }
+                }
+            })
+            this.reply={};
+            console.log(this.dynamicLists2)
         }
 
     },
@@ -394,14 +421,15 @@ export default {
         
     }
         .moreArea{
-                margin-right: 0.4rem;
-                background-color: #eee;
-                width: 0.7rem;
-                border-radius: 0.1rem;
-                color: rgba(4,64,64,0.729);
-                float: right;
-                margin-top: 0.4rem;
-                margin-bottom: 0.5rem;
+            margin-right: 0.6rem;
+            width: 0.7rem;
+            border-radius: 0.1rem;
+            color: rgba(4,64,64,0.729);
+            float: right;
+            margin-top: 0.4rem;
+            margin-bottom: 0.5rem;
+            text-align: right;
+            clear: both;
         }
         .right{    
            min-height: 1.3rem;

@@ -49,3 +49,12 @@ See [Configuration Reference](https://cli.vuejs.org/config/).
 可以使用组合/deep/或::v-deep组合 - 两者都是别名，>>>并且工作完全相同
 - 4、背景颜色渐变 linear-gradient(red, yellow, blue)
 background: linear-gradient(to bottom,  #A46E92 0%,#27455D 100%);（左上角到右下角的线性渐变）
+
+- 5、登录以后自动登录
+        原因：刷新，在Vuex保存得数据消失
+        解决方法：
+                1、自动发请求获取用户信息
+                2、通过服务端session缓存[持久会话]得userId来获取用户信息
+- 6、图片懒加载、路由懒加载
+        1、图片懒加载使用的是npm install vue-lazyload --save-dev工具
+        

@@ -2,27 +2,21 @@
   <div class="me-info">
     <div class="head">
       <div class="head-t">
-        <div class="clear" >
+        <div class="clear">
           <span class="iconfont icon-shezhi pull-right seting" @click="actionSheet"></span>
         </div>
-        <mt-actionsheet
-          :actions="actions"
-          v-model="sheetVisible"
-          > 
+        <mt-actionsheet :actions="actions" v-model="sheetVisible">
         </mt-actionsheet>
         <div class="my-info clear" @click="$router.push({path:'/mine/updateInfo'})">
           <div class="pull-left my-l">
-            <img src="https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1573017585034&di=73d85c084764c80e5eac6d0f76abf5d4&imgtype=0&src=http%3A%2F%2Fcdn.duitang.com%2Fuploads%2Fitem%2F201610%2F03%2F20161003145053_X25ky.jpeg">
+            <img :src='userInfo.user_avatar'>
           </div>
           <div class="pull-left my-m">
-            <span>何玉硕</span>
-            <span>在职-考虑机会</span>
+            <span>{{userInfo.user_name}}</span>
+            <span>在职-{{userInfo.user_incumbency===1?'随时到岗':'在职'}}</span>
           </div>
           <div class="pull-right my-r">
             <div class="clear">
-              <!-- <div class="pull-left">
-                <span>编辑简历</span>
-              </div> -->
               <div class="pull-left my-r-l">
                 <span class="icon-right"></span>
               </div>
@@ -32,71 +26,86 @@
       </div>
     </div>
     <div class="mineCell">
-      <mine-cell 
-      v-for="(mineItem) in mineLists"
-      :key='mineItem.id'
+      <mine-cell v-for="(mineItem) in mineLists" 
+      :key='mineItem.id' 
       :mineItem='mineItem'
+      @click="$router.push({name:mineItem.name})"
       ></mine-cell>
     </div>
   </div>
 </template>
 
 <script>
-import mineCell from "../components/mine/mineCell";
-export default {
-  name: "hello",
-  components:{
-    mineCell,
-  },
-  data() {
-    return {
-      msg: "Welcome to Your Vue.js App",
-      // action sheet 选项内容
-      actions: [{
-        name: '退出登录',
-        method : this.logOut	// 调用methods中的函数
-      }],
-      // action sheet 默认不显示，为false。操作sheetVisible可以控制显示与隐藏
-      sheetVisible:false,
-      mineLists:[
-        {
-          id:1,
-          content:"收藏",
-          avatar:'icon-gongzuojingli'
-        },
-        {
-          id:2,
-          content:"日程",
-          avatar:'icon-rili'
-        },
-        {
-          id:3,
-          content:"我的打卡",
-          avatar:'icon-tubiaozhizuomobankuozhan-'
-        }
-      ]
-    };
-  },
-  watch: {},
-  computed: {
-    session_id() {
-      return this.$store.state.logIn.session_id;
-    }
-  },
-  methods: {
-    actionSheet(){
-      this.sheetVisible=true;
+  import {
+    mapState,
+    mapActions
+  } from 'Vuex';
+  import mineCell from "../components/mine/mineCell";
+  export default {
+    name: "hello",
+    components: {
+      mineCell,
     },
-    // 退出登录
-    logOut(){
-      console.log("退出登录")
-    }
-  },
-  // 創建后挂载到root之后调用该钩子函数
-  mounted() {},
-  // 该实例被创建还没挂载root之前，ajax可以在这里
-  created() {}
-};
+    data() {
+      return {
+        msg: "Welcome to Your Vue.js App",
+        // action sheet 选项内容
+           actions: [{    
+          name: '退出登录',
+              method: this.logOut2 // 调用methods中的函数
+             
+        }],
+            // action sheet 默认不显示，为false。操作sheetVisible可以控制显示与隐藏
+        sheetVisible: false,
+        mineLists: [{
+            id: 1,
+            content: "我的收藏",
+            avatar: 'icon-gongzuojingli',
+            name:'collection'
+          },
+          {
+            id: 2,
+            content: "我的分享",
+            avatar: 'icon-fengcai',
+            name:'mineDynamic'
+          },
+          {
+            id: 3,
+            content: "我的打卡",
+            avatar: 'icon-tubiaozhizuomobankuozhan-',
+            name:'mineWork '
+          }
+        ]
+      };
+    },
+    watch: {},
+    computed: {
+      ...mapState(['userInfo']),
+      session_id() {
+        return this.$store.state.logIn.session_id;
+      }
+    },
+    methods: {
+      ...mapActions(['getUser', 'logOut']),
+      actionSheet() {
+        this.sheetVisible = true;
+      },
+      // 退出登录
+      logOut2() {
+        // console.log("退出登录")
+        this.logOut().then(res => {
+          // console.log(res)
+          this.$router.replace('/login')
+        })
+      }
+    },
+    // 創建后挂载到root之后调用该钩子函数
+    mounted() {
+      this.getUser();
+    },
+    // 该实例被创建还没挂载root之前，ajax可以在这里
+    created() {}
+  };
 </script>
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
@@ -144,6 +153,7 @@ export default {
 
         span:nth-child(1) {
           font-size: 0.4rem;
+          margin-bottom: 0.3rem
         }
       }
 
@@ -273,4 +283,12 @@ export default {
     text-align: center;
   }
 }
+
+
+  .mineCell icon-tubiaozhizuomobankuozhan-{
+    color: #0edde4;
+  }
+  .mineCell icon-fengcai{
+    color: #ff303080;
+  }
 </style>

@@ -91,7 +91,7 @@
       </section>
     </div>
     <div class="toImmediately">
-      <mt-button type="primary" size="large">立即沟通</mt-button>
+      <mt-button type="primary" size="large" @click.stop="$router.push({name:'chart',params:{targetUser:user}})">立即沟通</mt-button>
     </div>
   </div>
 </template>
@@ -314,6 +314,15 @@ export default {
   },
   data() {
     return {
+      user:{
+          "_id" : "5e10b2a17f06ab35c0c4f1ef",
+          "user_avatar" : "https://ss0.bdstatic.com/70cFuHSh_Q1YnxGkpoWK1HF6hhy/it/u=1620038707,2392030161&fm=26&gp=0.jpg",
+          "user_limit" : 1,
+          "user_incumbency" : 1,
+          "user_name" : "11",
+          "user_email" : "793035324@qq.com",
+          "user_phone" : "13433436445"
+      },
       //初始化无限加载相关参数
       queryLoading: false,
       moreLoading: false, //加载更多
@@ -329,7 +338,8 @@ export default {
       ask_educat: "本科",
       hr_img: "招聘者头像",
       hr_name: "招聘者名称",
-      hr_duty: "招聘者职务",
+      hr_phone: "招聘者电话",
+      hr_duty: "招聘者职务",//hr_为岗位的提供者
       isMore: false, //显示控制
       divHeight: Number, //div初始时高度
       map: "",
@@ -372,7 +382,7 @@ export default {
       // 窗口信息
       var markers = [
         {
-          content: "惠州潼湖科技小镇",
+          content: "惠州潼湖科技小镇",//公司名称
           title: "公司地址",
           imageOffset: { width: 0, height: -21 },
           position: { lat: 23.001292, lng: 114.187226 }
@@ -456,9 +466,9 @@ export default {
         cancelButtonText: "取消"
       })
         .then(action => {
-          console.log("action", action);
+         // console.log("action", action);
           if (action == "confirm") {
-            console.log(1111);
+          //  console.log(1111);
             // 允许获取当前地理位置
             // 该方法谷歌浏览器不支持
             // if(navigator.geolocation){
@@ -482,18 +492,18 @@ export default {
             
             var geolocation = new BMap.Geolocation(); //获取当前经纬度
             geolocation.getCurrentPosition(function(r) {//使用百度地图获取当前位置定位不准确。
-              console.log(113.501851, 23.456728);//华软经纬度
-              console.log(r.point.lng, r.point.lat);
-              console.log("r", r);
+            //  console.log(113.501851, 23.456728);//华软经纬度
+            //  console.log(r.point.lng, r.point.lat);
+             // console.log("r", r);
               if (this.getStatus() == BMAP_STATUS_SUCCESS) {
                   const myGeo = new BMap.Geocoder();
                   myGeo.getLocation(
                     new BMap.Point(r.point.lng, r.point.lat),
                     data => {
-                      console.log("data", data);
+                   //   console.log("data", data);
                       if (data.addressComponents) {
                         const result = data.addressComponents;
-                        console.log("result", result);
+                     //   console.log("result", result);
                         const location = {
                           //用户当前的位置
                           creditLongitude: r.point.lat, // 经度
@@ -504,12 +514,12 @@ export default {
                           creditStreet:
                             (result.street || "") + (result.streetNumber || "") // 街道
                         };
-                        console.log("location", location);
+                     //   console.log("location", location);
                         _this.location = location;
                         _this.creditLongitude = location.creditLongitude; //当前经度
                         _this.creditLatitude = location.creditLatitude; //当前纬度
                         _this.creditCity = location.creditCity;
-                        console.log("_this.creditLongitude",_this.creditLongitude,"_this.creditLatitude",_this.creditLatitude)
+                      //  console.log("_this.creditLongitude",_this.creditLongitude,"_this.creditLatitude",_this.creditLatitude)
                         // 获取到当前的经纬度，根据起点与终点经纬度请求百度地图的接口
                         // _this.creditLongitude 23.1200491 _this.creditLatitude 113.30764968
                         var url =
@@ -522,7 +532,7 @@ export default {
                           "&mode=driving&region=" +
                           "惠州市" +
                           "&output=html&src=webapp.baidu.openAPIdemo&vt=map";
-                        console.log("url", url);
+                       // console.log("url", url);
                         window.location.href = url
                         //  "http://api.map.baidu.com/direction?origin=latlng:34.264642646862,108.95108518068|name:我家&destination=大雁塔&mode=driving&region=西安&output=html&src=webapp.baidu.openAPIdemo&vt=map";
                       }
@@ -548,7 +558,7 @@ export default {
   },
   showMap(lat,lon) {//自定义了一个在浏览器上显示地理信息的函数
       var str = "您当前位置的维度："+lat+"，经度："+lon;
-      console.log(str)
+     // console.log(str)
         // GetID.innerHTML = str;
   }
 };

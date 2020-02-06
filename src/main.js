@@ -7,7 +7,12 @@ import 'element-ui/lib/theme-chalk/index.css';
 import MintUI from 'mint-ui'
 import 'mint-ui/lib/style.css'
 import './plugins/rem.js'
+import VueLazyload from 'vue-lazyload';//图片懒加载
+import Vconsole from'vconsole';
+// 真机调试
+const vConsole =new Vconsole();
 
+Vue.use(vConsole);
 // rem
 import "./js/flexible"
 //导入字体样式
@@ -23,7 +28,14 @@ Vue.use(preview, {
 })
 Vue.use(ElementUI);
 Vue.use(MintUI);
+Vue.use(VueLazyload, {
+  preLoad: 1.3,
+  // error: 'dist/error.png',
+  loading: 'dist/loading.gif',
+  attempt: 1
+})
 Vue.config.productionTip = false;
+
 
 new Vue({
   router,

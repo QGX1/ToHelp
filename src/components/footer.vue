@@ -10,11 +10,11 @@
       <span>首页</span>
     </div>
 
-    <div class="guide_item" @click="goto('/clockin')" :class="{on:isCurrent('/clockin')}">
+    <div class="guide_item" @click="goto('/dynamic')" :class="{on:isCurrent('/dynamic')}">
       <span class="item_icon">
         <i class="iconfont icon-gongzuotai"></i>
       </span>
-      <span>动态</span>
+      <span>分享</span>
     </div>
 
     <div class="guide_item" @click="goto('/news')" :class="{on:isCurrent('/news')}">

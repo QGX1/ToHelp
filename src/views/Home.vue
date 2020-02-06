@@ -3,11 +3,11 @@
         <HeaderTop title="首页">
         </HeaderTop>
         <ul
-            v-infinite-scroll="loadMore"
+            v-infinite-scroll="loadMore2"
             infinite-scroll-disabled="loading"
             infinite-scroll-distance="10"
             @click="toDetailHome">
-            <li v-for="item in list" :key="item" >
+            <li v-for="item in list" :key="item.index" >
                 <section class="job_information">
                     <div class="job_information_top">
                          <h1 class="job_title ellipsis">
@@ -38,7 +38,7 @@
             </li>
         </ul>
         <div v-show="loading" class="page-infinite-loading">
-            <mt-spinner type="fading-circl e "></mt-spinner>客官您滑慢点...                              
+            <mt-spinner type="fading-circl"></mt-spinner>客官您滑慢点...                              
         </div>
         <!-- <ul class="mui-table-view" v-inf sainite-scroll="loadMore" infinite-scroll-disabled="moreLoading" infinite-scroll-distance="0" infinite-scroll-immediate-check="false"> -->
             <!--li数据遍历循环部分-->
@@ -56,6 +56,7 @@
         </ul> -->
     </div>
 </template>
+
 
 <style lang="stylus" scoped>
 #home{
@@ -260,7 +261,7 @@ export default {
                 });
             },
         // 模擬無限下拉加載
-        loadMore() {
+        loadMore2() {
             this.loading = true;
             setTimeout(() => {
                 this.list=this.list.concat(this.temp);
@@ -300,6 +301,10 @@ export default {
          
     //   }
     },
+    destroyed() { 
+        console.log(2333)
+        window.removeEventListener('scroll', this.loadMore2);
+    }
     
 }
 </script>

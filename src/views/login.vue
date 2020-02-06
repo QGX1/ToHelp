@@ -49,7 +49,7 @@ export default {
     created(){
         window.addEventListener('resize', this.getHeight);
         this.getHeight()
-        console.log(this.contentStyleObj);
+        // console.log(this.contentStyleObj);
     },
     destroyed(){
         window.removeEventListener('resize', this.getHeight)

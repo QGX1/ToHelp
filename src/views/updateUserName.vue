@@ -8,8 +8,8 @@
                 </span>
             </router-link>
         </HeaderTop>
-        <form class="updateUserName" action="请求服务端提交数据">
-            <input type='text' maxlength="20" value="" v-model="user_name" class="inputName"/>
+        <form class="updateUserName"  @submit.prevent="submit">
+            <input type='text' maxlength="20" value="" v-model='userInfo.user_name' class="inputName"/>
             <input type="submit" value="提交" class="canUserNameSubmit">
         </form>
     </div>
@@ -17,6 +17,8 @@
 
 <script>
 import HeaderTop from "../components/HeaderTop";
+import {mapState} from 'Vuex';
+import {updateUserInfo} from '../api/index'
 export default {
   name: "updateUserName",
   components: {
@@ -24,9 +26,22 @@ export default {
   },
   data() {
     return {
-        user_name:'1111'
     };
-  }
+  },
+  mounted() {
+     // console.log(this.userInfo)
+    //   console.log(this.$route.params)
+  },
+  computed: {
+      ...mapState(['userInfo'])
+  },
+  methods: {
+      async submit(){
+        let resUpdata=await updateUserInfo(this.userInfo);
+        // 弹出提示框，修改成功
+       // console.log(resUpdata)
+      }
+  },
 };
 </script>
 <style lang="stylus" scoped>
