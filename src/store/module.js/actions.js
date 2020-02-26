@@ -1,4 +1,5 @@
 import * as types from "./types";
+import decode from 'jwt-decode';//解析token
 import{
     instance,
     register,
@@ -46,24 +47,26 @@ export default {
     },
     getUser ({ commit }) {    
         return new Promise((resolve, reject) => {      
-            reqUserInfo().then(res => {        
+            let user_id=decode(window.sessionStorage.getItem('token')).id;
+            console.log(user_id)
+            reqUserInfo(user_id).then(res => {        
                 if (res.status === 200) {          
-                    commit(types.USERINFO, res.data.rule) // 把 userInfo 存进 Vuex        
+                    commit(types.USERINFO, res.data.msg) // 把 userInfo 存进 Vuex        
                 }      
             }).catch((error) => {        
                 reject(error)      
-            })    
+            })       
         })  
     },
     // 异步获取用户信息
-    async getUser({commit}){
-        let result = await reqUserInfo();
-        console.log(result)
-        if(result.data.code===0){
-            const userInfo=result.data.msg;
-            commit(types.USERINFO,userInfo)
-        }
-    },
+    // async getUser({commit}){
+    //     let result = await reqUserInfo();
+    //     console.log(result)
+    //     if(result.data.code===0){
+    //         const userInfo=result.data.msg;
+    //         commit(types.USERINFO,userInfo)
+    //     }
+    // },
     // 异步查询用户密码
     async checkEmail({commit},value){
         let result = await forgetPwd(value);

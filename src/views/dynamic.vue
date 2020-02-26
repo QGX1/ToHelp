@@ -1,16 +1,6 @@
 <template>
     <div id="dynamic" @click="hide">
         <HeaderTop title="分享">
-            <!-- <router-link slot="left" class="left" to='/mine'>
-                <span>
-                    <i class="iconfont icon-fanhui1"></i>
-                </span>
-            </router-link> -->
-           <!-- <div slot="left" class="left" @click.prevent="cancelCom" v-show="showComment">
-                <span>
-                    <i class="iconfont icon-fanhui1"></i>
-                </span>
-            </div> -->
             <router-link slot="right" class="writeDynamic" to='/writeDynamic'>
                 <span>
                     <i class="iconfont icon-fabiaoyouji2-copy"></i>
@@ -22,7 +12,9 @@
             infinite-scroll-distance="0" infinite-scroll-immediate-check="false">
             <div class="userIssue" v-for="(item,index) of dynamicLists2" :key="item._id">
                 <div class="userAvatar">
-                    <img :src='item.users.user_avatar' alt="用户头像"> 
+                    <img 
+                    :src="item.users.user_avatar?'http://192.168.43.177:8081/'+item.users.user_avatar:'https://cube.elemecdn.com/9/c2/f0ee8a3c7c9638a54940382568c9dpng.png'"
+                    alt="用户头像"> 
                 </div>
                 <div class="userJoinContent"> 
                     <div class="jionContent">

@@ -1,7 +1,7 @@
 <template>
     <div id="contactsCom" @click.stop="$router.push({name:'chart',params:{targetUser:friend}})">
         <div class="contacts-container" >
-            <img :src='friend.user_avatar' class="userAvatar"/>
+            <img :src="friend.user_avatar?'http://192.168.43.177:8081/'+friend.user_avatar:'https://cube.elemecdn.com/9/c2/f0ee8a3c7c9638a54940382568c9dpng.png'" class="userAvatar"/>
             <span class="count" v-show="infor_count">{{infor_count}}</span>
             <span class="userName">{{friend.user_name}}</span>
         </div>

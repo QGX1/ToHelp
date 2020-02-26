@@ -30,6 +30,7 @@ import contactsCom from "../components/news/contactsCom.vue";
 import HeaderTop from "../components/HeaderTop";
 import WSocket from "../../socket";
 import {mapState,mapActions} from 'Vuex';
+import {showLoading,hideLoading} from '../api/loading';
 export default {
     name:"contacts",
     components:{
@@ -48,13 +49,14 @@ export default {
         
     },
     mounted(){
+        showLoading()
         this.user_id=this.userInfo._id?this.userInfo._id:this.userInfo.id
-        // console.log(this.userInfo)
-        this.getFriendsList(this.user_id);
+        this.getFriendsList(this.user_id).then(res=>{
+            hideLoading()//隐藏加载框
+        });
         WSocket.init(
             {user:this.user_id},
             message=>{
-                // console.log('fff',message)
                 this.setMsgCount(message);
             },
             err=>{
@@ -108,6 +110,7 @@ export default {
                 this.friendsList=res.data.msg;
                 this.allFriends=res.data.msg;
                 console.log('eee',this.friendsList);
+                return 1;
             })
         },
         filterData(){

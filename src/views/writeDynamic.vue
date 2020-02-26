@@ -1,7 +1,7 @@
 <template>
     <div id='writeDynamic' >
         <HeaderTop >
-           <router-link slot="left" class="left" to='/clockin'>
+           <router-link slot="left" class="left" to='/dynamic'>
                 <span>
                     <i class="iconfont icon-fanhui1"></i>
                 </span>

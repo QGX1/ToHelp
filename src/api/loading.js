@@ -5,7 +5,7 @@ let loading;
  
 const startLoading = () => {
   loading = Indicator.open({
-    text: '加载中……',
+    text: '加载中...',
     spinnerType: 'fading-circle'
   });
 };

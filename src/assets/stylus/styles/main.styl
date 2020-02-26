@@ -157,6 +157,8 @@
    line-height:1rem;
    text-align:center;
    sc(.4rem,$vuecolor);
+   display: flex;
+   justify-content:center; 
  }
 .page-infinite-loading span{
     display: inline-block;
@@ -182,4 +184,17 @@
 }
 .cell-title{
   margin-left 0.2rem
+}
+.mint-indicator-wrapper{
+  top: 50%;
+  left: 50%;
+  position: fixed;
+  -webkit-transform: translate(-50%, -50%);
+  transform: translate(-50%, -50%);
+  border-radius: 5px;
+  background: rgba(0, 0, 0, 0.7);
+  color: white;
+  -webkit-box-sizing: border-box;
+  box-sizing: border-box;
+  text-align: inherit;
 }

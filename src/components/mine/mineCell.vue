@@ -42,7 +42,7 @@ export default {
 .cell-title i {
     vertical-align: middle;
     margin-right: 0.6rem;
-    font-size: 1rem;
+    font-size: 0.7rem;
 }
 .cell-title span {
   display: inline-block;
@@ -53,7 +53,12 @@ i.iconfont.icon-icon-test2 {
     font-size: 0.5rem;
     color: #ccc;
 }
-
+.icon-gongzuojingli{
+  color: #9acd32d6;
+}
+i.iconfont.icon-fengcai{
+  color: #fa9815;
+}
 .badge {
   background-color: #ff0a0a;
   border-radius: 10px;

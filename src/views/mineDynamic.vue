@@ -25,7 +25,9 @@
                 @touchend.stop="cleartime(item)"
                 :key="item._id">
                 <div class="userAvatar">
-                    <img :src='item.users.user_avatar' alt="用户头像"> 
+                    <img 
+                    :src="item.users.user_avatar?'http://192.168.43.177:8081/'+item.users.user_avatar:'https://cube.elemecdn.com/9/c2/f0ee8a3c7c9638a54940382568c9dpng.png'"
+                     alt="用户头像"> 
                 </div>
                 <div class="userJoinContent"> 
                     <div class="jionContent">
@@ -131,7 +133,6 @@ import HeaderTop from "../components/HeaderTop";
 import SendComment2 from "../components/comment/sendComment2";
 import {addLike,deleteLike,getMineDynamic,deleteMineDynamic} from '../api/index'
 import Vue from "vue";
-import { setTimeout, clearTimeout } from 'timers';
 import { MessageBox } from 'mint-ui';
 // import func from './vue-temp/vue-editor-bridge';
 export default {

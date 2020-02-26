@@ -19,50 +19,6 @@ Vue.use(VueRouter);
 const router = new VueRouter({
   mode: "history",
   base: process.env.BASE_URL,
-  // scrollBehavior:(to, from, savedPosition) => {
-
-  //   if (savedPosition) {
-   
-  //    // savedPosition is only available for popstate navigations.
-   
-  //    return savedPosition
-   
-  //   } else {
-   
-  //    const position = {}
-   
-  //    // new navigation.
-   
-  //    // scroll to anchor by returning the selector
-   
-  //    if (to.hash) {
-   
-  //     position.selector = to.hash
-   
-  //    }
-   
-  //    // check if any matched route config has meta that requires scrolling to top
-   
-  //    if (to.matched.some(m => m.meta.scrollToTop)) {
-   
-  //     // cords will be used if no selector is provided,
-   
-  //     // or if the selector didn't match any element.
-   
-  //     position.x = 0
-   
-  //     position.y = 0
-   
-  //    }
-   
-  //    // if the returned position is falsy or an empty object,
-   
-  //    // will retain current scroll position.
-   
-  //    return position
-   
-  //   }
-  // },
   routes:[
   {
     path: "/",
@@ -80,7 +36,7 @@ const router = new VueRouter({
     component: DetailHome,
     meta:{
       showFooter:false,
-      // requiresAuth:true
+      requiresAuth:true
     }
   },
   {
@@ -89,7 +45,7 @@ const router = new VueRouter({
     component: Home,
     meta:{
       showFooter:true,
-      // requiresAuth:true
+      requiresAuth:true,
       scrollToTop: true
     }
   },
@@ -99,7 +55,7 @@ const router = new VueRouter({
     component: PathMap,
     meta:{
       showFooter:false,
-      // requiresAuth:true
+      requiresAuth:true
     }
   },
   {
@@ -109,7 +65,7 @@ const router = new VueRouter({
     component: Dynamic,
     meta:{
       showFooter:true,
-      // requiresAuth:true
+      requiresAuth:true,
       keepAlive:true,
       scrollToTop: true
     }
@@ -121,7 +77,7 @@ const router = new VueRouter({
     component: WriteDynamic,
     meta:{
       showFooter:false,
-      // requiresAuth:true
+      requiresAuth:true
     }
   },
   {
@@ -130,7 +86,7 @@ const router = new VueRouter({
     component: News,
     meta:{
       showFooter:true,
-      // requiresAuth:true
+      requiresAuth:true
     }
   },
   {
@@ -139,7 +95,7 @@ const router = new VueRouter({
     component: Mine,
     meta:{
       showFooter:true,
-      // requiresAuth:true
+      requiresAuth:true
     }
   },
   // 我的动态
@@ -148,7 +104,25 @@ const router = new VueRouter({
     name: "mineDynamic",
     component: MineDynamic,
     meta:{
-      // requiresAuth:true
+      requiresAuth:true
+    }
+  },
+   // 我的收藏
+   {
+    path: "/mineCollect",
+    name: "mineCollect",
+    component: ()=>import ("../views/mineCollect"),
+    meta:{
+      requiresAuth:true
+    }
+  },
+   // 我的考勤
+   {
+    path: "/mineWork",
+    name: "mineWork",
+    component: ()=>import ("../views/mineWork"),
+    meta:{
+      requiresAuth:true
     }
   },
   {
@@ -157,7 +131,7 @@ const router = new VueRouter({
     component:UpdateInfo,
     meta:{
       showFooter:false,
-      // requiresAuth:true
+       requiresAuth:true
     }
   },
   {
@@ -166,20 +140,28 @@ const router = new VueRouter({
     component:UpdateUserName,
     meta:{
       showFooter:false,
-      // requiresAuth:true
+      requiresAuth:true
     },
   },
   {
     // 子嵌套路由会自动补全斜线，所以不需要添加斜线
     path:'/updataUserAvatar',
     name:'updataUserAvatar',
-    component:()=>import("../views/updataUserAvatar.vue")
+    component:()=>import("../views/updataUserAvatar.vue"),
+    meta:{
+      showFooter:false,
+      requiresAuth:true
+    },
   },
   {
     //聊天界面
     path:'/chart',
     name:'chart',
-    component:()=>import("../views/chart.vue")
+    component:()=>import("../views/chart.vue"),
+    meta:{
+      showFooter:false,
+      requiresAuth:true
+    },
   }
   ]
 })

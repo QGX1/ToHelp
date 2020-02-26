@@ -15,7 +15,9 @@
                 <section class="userAvatar" @click="$router.push({name:'updataUserAvatar'})">
                     <span class="cell-title" >头像</span>
                     <i class="iconfont icon-icon-test2 infoContent" ></i>
-                    <img class="avatar infoContent" :src='userInfo.user_avatar' alt="用户头像" />  
+                    <img class="avatar infoContent" 
+                        :src="userInfo.user_avatar?'http://192.168.43.177:8081/'+userInfo.user_avatar:'https://cube.elemecdn.com/9/c2/f0ee8a3c7c9638a54940382568c9dpng.png'"
+                     alt="用户头像" />  
                 </section>
                 <section class="userContent">
                     <div @click="$router.push({name:'updateusername'})">

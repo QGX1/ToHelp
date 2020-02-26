@@ -24,8 +24,22 @@ data() {
     isRouterAlive:true
   }
 },
+created(){
+  // 解决数据刷新vueX数据丢失的问题
+  //在页面加载时读取sessionStorage里的状态信息
+    if (sessionStorage.getItem("store") ) {
+        this.$store.replaceState(Object.assign({}, this.$store.state,JSON.parse(sessionStorage.getItem("store"))))
+    } 
+    // Object.assign() 方法用于将所有可枚举属性的值从一个或多个源对象复制到目标对象。它将返回目标对象。
+
+    //在页面刷新时将vuex里的信息保存到sessionStorage里
+    window.addEventListener("beforeunload",()=>{
+        sessionStorage.setItem("store",JSON.stringify(this.$store.state))
+    })
+},
 mounted() {
     //window.onscroll = this.justifyPos;
+
   },
 methods: {
   // 配置页面强制刷新
@@ -35,16 +49,6 @@ methods: {
         this.isRouterAlive = true;
       });
     },
-    // justifyPos() {
-    //   // 节流；
-    //   if (this.timerId) {
-    //     clearTimeout(this.timerId);
-    //   }
-    //   this.timerId = setTimeout(() => {
-    //     // 滚动停止的时候记录当前组件的滚动位置信息，并且存储到对应组件的路由 meta 这个对象中
-    //     this.$route.meta.y = window.pageYOffset;
-    //   }, 300);
-    //  }
   }
 }
 </script>

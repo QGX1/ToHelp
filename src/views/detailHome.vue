@@ -1,32 +1,35 @@
 <template>
   <div id="detailHome">
-    <HeaderTop title="前端开发">
+    <HeaderTop :title="user.job_post">
       <!-- title为岗位 -->
-      <router-link to="/home" slot="left" class="left">
+      <div @click="$router.go(-1)" slot="left" class="left">
         <span>
           <i class="iconfont icon-fanhui1"></i>
         </span>
-      </router-link>
+      </div>
+      <div slot="right" class="collectionIcon" @click="addCollection">
+        <i class="iconfont icon-shoucang2-copy" :class="isCollection?'isCollection':''"></i>
+      </div>
     </HeaderTop>
     <!-- 头部标题 -->
     <div class="job_content">
       <section class="job_information">
         <div class="job_information_top">
-          <h1 class="job_title">{{post}}</h1>
-          <div class="job_salary">{{salary}}</div>
+          <h1 class="job_title">{{user.job_post}}</h1>
+          <div class="job_salary">{{user.job_salary}}</div>
         </div>
         <div class="job_sist">
           <span>
             <i class="iconfont icon-weizhi"></i>
-            {{sist}}
+            {{user.job_site}}
           </span>
           <span>
             <i class="iconfont icon-gongzuojingli"></i>
-            {{ask_for}}
+            {{user.job_ask_for}}
           </span>
           <span>
             <i class="iconfont icon-edu-line"></i>
-            {{ask_educat}}
+            {{user.job_educat}}
           </span>
         </div>
         <br>
@@ -35,16 +38,16 @@
       <section class="hr_information">
         <div class="job_hr_img">
           <img
-            src="https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1573017585034&di=73d85c084764c80e5eac6d0f76abf5d4&imgtype=0&src=http%3A%2F%2Fcdn.duitang.com%2Fuploads%2Fitem%2F201610%2F03%2F20161003145053_X25ky.jpeg"
+            :src="user.users.user_avatar?'http://192.168.43.177:8081/'+user.users.user_avatar:'https://cube.elemecdn.com/9/c2/f0ee8a3c7c9638a54940382568c9dpng.png'"
           >
         </div>
-        <div class="job_hr_name">{{hr_name}}</div>
+        <div class="job_hr_name" >{{user.users.user_name}}</div>
         <div class="job_hr_information">
-          <span>{{company}}</span>
+          <span style="margin: 0.3rem;">{{user.users.user_company}}</span>
           <span>
             <!-- <i class="iconfont icon-dian"></i> -->
           </span>
-          <span>{{hr_duty}}</span>
+          <span>{{user.users.user_company_position}}</span>
         </div>
       </section>
       <section class="job_descript">
@@ -54,16 +57,14 @@
         <div class="descript_job">
           <span class="descript_content">职位描述：</span>
           <ul>
-            <li>1、负责1111</li>
-            <li>2、负责2222</li>
+            <li>{{user.job_descript}}</li>
           </ul>
         </div>
         <transition name="job">
           <div v-show="isMore" class="descript_job1">
             <span>任职要求：</span>
             <ul>
-              <li>1、负责1111</li>
-              <li>2、负责2222</li>
+              <li>{{user.job_skill}}</li>
             </ul>
           </div>
         </transition>
@@ -91,12 +92,31 @@
       </section>
     </div>
     <div class="toImmediately">
-      <mt-button type="primary" size="large" @click.stop="$router.push({name:'chart',params:{targetUser:user}})">立即沟通</mt-button>
+      <mt-button
+        type="primary"
+        size="large"
+        @click.stop="$router.push({name:'chart',params:{targetUser:user.users}})"
+      >立即沟通</mt-button>
     </div>
   </div>
 </template>
 
 <style lang="stylus" rel='stylesheet/stylus' scoped>
+.collectionIcon {
+  float: right;
+  margin: 1rem, 0.2rem, 0px, 0px;
+  margin-top: -0.8rem;
+  margin-right: 0.3rem;
+  .icon-shoucang2-copy{
+    color #fff;
+    font-size 0.8rem;
+  }
+  .isCollection{
+    font-size 0.8rem;
+    color #fdd741;
+  }
+}
+
 .toTips {
   margin-top: 0.5rem;
   margin-left: 0.2rem;
@@ -123,10 +143,11 @@ span.tips2 {
   position: absolute;
   top: 0.1rem;
 }
-    i.iconfont.icon-fanhui1 {
-      font-size: 0.8rem;
-      color: #ffffff;
-    }
+
+i.iconfont.icon-fanhui1 {
+  font-size: 0.8rem;
+  color: #ffffff;
+}
 
 .job_content {
   margin-top: 1rem;
@@ -136,6 +157,7 @@ span.tips2 {
   overflow-y: scroll;
   position: fixed;
   width: 100%;
+  margin-bottom: 1.5rem;
 }
 
 .job_content::-webkit-scrollbar {
@@ -228,10 +250,6 @@ img {
   margin-top: 1.1rem;
 }
 
-.job_hr_information span {
-  margin-right: 0.3rem;
-}
-
 section.job_descript {
   width: 90%;
   margin: 0.5rem auto;
@@ -270,6 +288,10 @@ section.job_descript {
     padding-top: 0.2rem;
     font-size: 0.38rem;
     color: #999;
+    white-space: pre-wrap;
+    text-align: left;
+    line-height: 0.6rem;
+    letter-spacing: 0.03rem;
   }
 }
 
@@ -305,8 +327,10 @@ section.job_descript {
 </style>
 
 <script>
-import { MessageBox, Toast } from "mint-ui";
+import { MessageBox, Toast, Indicator } from "mint-ui";
 import HeaderTop from "../components/HeaderTop";
+import {mapState} from 'Vuex'
+import {showLoading,hideLoading} from '../api/loading';
 export default {
   name: "detailHome",
   components: {
@@ -314,15 +338,7 @@ export default {
   },
   data() {
     return {
-      user:{
-          "_id" : "5e10b2a17f06ab35c0c4f1ef",
-          "user_avatar" : "https://ss0.bdstatic.com/70cFuHSh_Q1YnxGkpoWK1HF6hhy/it/u=1620038707,2392030161&fm=26&gp=0.jpg",
-          "user_limit" : 1,
-          "user_incumbency" : 1,
-          "user_name" : "11",
-          "user_email" : "793035324@qq.com",
-          "user_phone" : "13433436445"
-      },
+      user: {},
       //初始化无限加载相关参数
       queryLoading: false,
       moreLoading: false, //加载更多
@@ -330,22 +346,38 @@ export default {
       totalNum: 0, //总数
       pageSize: 10, //页面长度
       pageNum: 1, //从页面为1的开始
-      post: "前端开发1111222222",
-      company: "公司名称",
-      salary: "6元/小时",
-      sist: "地点1111111",
-      ask_for: "要求",
-      ask_educat: "本科",
-      hr_img: "招聘者头像",
-      hr_name: "招聘者名称",
-      hr_phone: "招聘者电话",
-      hr_duty: "招聘者职务",//hr_为岗位的提供者
       isMore: false, //显示控制
       divHeight: Number, //div初始时高度
-      map: "",
-      lat: 114.187729,
-      lng: 23.000593
+      map2: "",
+      // location:Object,
+      // creditLongitude:Number,
+      // creditCity:String,
+      job_site: "",
+      lat: 0,
+      lng: 0,
+      isCollection:false,
+      isCollect:false
     };
+  },
+  created() {
+    //获取路由携带的参数
+    showLoading();
+    console.log(this.$route.params.job);
+    this.user = this.$route.params.job;
+    this.lat = this.user.latitude;
+    this.lng = this.user.longitude;
+    this.job_site = this.user.job_site;
+     let value={
+      users:this.userInfo.id,
+      _id:this.user._id
+    }
+    this.getRequest(`/api/collect/`,value).then(res=>{
+      if(res.data.code==0) {
+        this.isCollection=true;
+        this.isCollect=true
+        }
+      hideLoading();
+    })
   },
   mounted() {
     this.divHeight = 0;
@@ -354,17 +386,63 @@ export default {
     this.addMapControl(); //向地图添加控件
     this.addMapOverlay(); //向地图添加覆盖物
   },
+  computed:{
+    ...mapState(['userInfo'])
+  },
+  beforeRouteLeave (to, from, next){
+    console.log('路由离开');
+    if(this.isCollect==this.isCollection){
+      // 表示用户没有对初始化的收藏按钮进行操作
+      console.log('没有进行操作')
+      next();//直接进行跳转
+    }else{
+      // 用户进行了操作，调用数据
+      console.log("修改")
+      this.DataCollect(this.isCollection)
+      next();
+    }
+  },
   methods: {
+    // 将添加或删除收藏存入数据库
+    DataCollect(value){
+      let collectData={
+        users:this.userInfo.id,
+        _id:this.user._id
+      };
+      if(value){
+        console.log("添加")
+        this.postRequest('/api/collect/addCollect',collectData).then(res=>{
+          //Toast(res.data.msg);
+          console.log(res);
+        }) 
+      }else{
+        console.log("取消")
+        this.deleteRequest('/api/collect/deleteCollect2',collectData).then(res=>{
+          //Toast(res.data.msg);
+          console.log(res);
+          
+        })
+      }
+    },
+    // 添加收藏
+    addCollection(){
+      this.isCollection=!this.isCollection;
+      if(this.isCollection){
+        Toast('已收藏')
+      }else{
+        Toast('取消收藏')
+      }
+    },
     //创建地图
     createMap() {
-      this.map = new BMap.Map("map"); //实例化地图
-      this.map.centerAndZoom(new BMap.Point(114.187729, 23.000593), 15); //公司地理位置的经纬度
+      this.map2 = new BMap.Map("map"); //实例化地图
+      this.map2.centerAndZoom(new BMap.Point(114.187729, 23.000593), 15); //公司地理位置的经纬度
       // 初始化地图
-      this.map.disableDragging(); //禁止拖拽
-      this.map.disableScrollWheelZoom(); //禁止缩放
-      this.map.disableDoubleClickZoom(); //禁止双击放大
-      this.map.disableDoubleClickZoom(); //禁止双击缩放事件
-      this.map.disablePinchToZoom(); //禁用双指操作
+      this.map2.disableDragging(); //禁止拖拽
+      this.map2.disableScrollWheelZoom(); //禁止缩放
+      this.map2.disableDoubleClickZoom(); //禁止双击放大
+      this.map2.disableDoubleClickZoom(); //禁止双击缩放事件
+      this.map2.disablePinchToZoom(); //禁用双指操作
     },
     setMapEvent() {},
     //设置地图事件
@@ -382,10 +460,10 @@ export default {
       // 窗口信息
       var markers = [
         {
-          content: "惠州潼湖科技小镇",//公司名称
+          content: this.job_site, //公司名称
           title: "公司地址",
           imageOffset: { width: 0, height: -21 },
-          position: { lat: 23.001292, lng: 114.187226 }
+          position: { lat: this.lat, lng: this.lng }
         }
       ];
       for (var index = 0; index < markers.length; index++) {
@@ -409,7 +487,8 @@ export default {
           // width: 200,
           title: markers[index].title, //信息窗口标题
           height: 0, //信息窗口高度
-          enableMessage: true //是否在信息窗里显示短信发送按钮
+          enableMessage: true, //是否在信息窗里显示短信发送按钮
+          enableCloseOnClick: false //是否开启点击地图关闭信息窗口（默认开启）
         };
         var infoWindow = new BMap.InfoWindow(markers[index].content, opts); //创建信息窗口对象
         infoWindow.addEventListener("open", function(type, target, point) {
@@ -421,40 +500,15 @@ export default {
         setTimeout(() => {
           marker.openInfoWindow(infoWindow);
         });
-        this.map.addOverlay(marker);
+        this.map2.addOverlay(marker);
       }
     },
-    
+
     //向地图添加控件
     addMapControl() {},
     // 点击显示更多
     toggleMore() {
       this.isMore = !this.isMore;
-    },
-    //无限加载函数
-    loadMore() {
-      if (this.allLoaded) {
-        this.moreLoading = true;
-        return;
-      }
-      if (this.queryLoading) {
-        return;
-      }
-      this.moreLoading = !this.queryLoading;
-      this.pageNum++;
-      // this.$http.post("请求后台数据的接口",Object.assign({pageNum:this.pageNum},this.params)).then((res) => {
-      //   if(res.sData && res.sData.list){
-      //     this.list = this.list.concat(res.sData.list);
-      //     this.allLoaded = this.debtList.length==this.totalNum;
-      //   }
-      //   this.moreLoading = this.allLoaded;
-      // });
-      if (list) {
-        this.list = this.list.concat(res.sData.list);
-        this.allLoaded = this.debtList.length == this.totalNum;
-      } else {
-        this.moreLoading = this.allLoaded;
-      }
     },
     // 跳转到百度地图
     getCity() {
@@ -466,9 +520,9 @@ export default {
         cancelButtonText: "取消"
       })
         .then(action => {
-         // console.log("action", action);
+          // console.log("action", action);
           if (action == "confirm") {
-          //  console.log(1111);
+            //  console.log(1111);
             // 允许获取当前地理位置
             // 该方法谷歌浏览器不支持
             // if(navigator.geolocation){
@@ -489,55 +543,57 @@ export default {
             //       console.log( "您当前使用的浏览器不支持地理定位服务")
             //   }
             // console.log("navigator",navigator.geolocation.getCurrentPosition())
-            
+
             var geolocation = new BMap.Geolocation(); //获取当前经纬度
-            geolocation.getCurrentPosition(function(r) {//使用百度地图获取当前位置定位不准确。
-            //  console.log(113.501851, 23.456728);//华软经纬度
-            //  console.log(r.point.lng, r.point.lat);
-             // console.log("r", r);
+            geolocation.getCurrentPosition(function(r) {
+              //使用百度地图获取当前位置定位不准确。
+              //  console.log(113.501851, 23.456728);//华软经纬度
+              //  console.log(r.point.lng, r.point.lat);
+              // console.log("r", r);
               if (this.getStatus() == BMAP_STATUS_SUCCESS) {
-                  const myGeo = new BMap.Geocoder();
-                  myGeo.getLocation(
-                    new BMap.Point(r.point.lng, r.point.lat),
-                    data => {
-                   //   console.log("data", data);
-                      if (data.addressComponents) {
-                        const result = data.addressComponents;
-                     //   console.log("result", result);
-                        const location = {
-                          //用户当前的位置
-                          creditLongitude: r.point.lat, // 经度
-                          creditLatitude: r.point.lng, // 纬度
-                          creditProvince: result.province || "", // 省
-                          creditCity: result.city || "", // 市
-                          creditArea: result.district || "", // 区
-                          creditStreet:
-                            (result.street || "") + (result.streetNumber || "") // 街道
-                        };
-                     //   console.log("location", location);
-                        _this.location = location;
-                        _this.creditLongitude = location.creditLongitude; //当前经度
-                        _this.creditLatitude = location.creditLatitude; //当前纬度
-                        _this.creditCity = location.creditCity;
+                const myGeo = new BMap.Geocoder();
+                myGeo.getLocation(
+                  new BMap.Point(r.point.lng, r.point.lat),
+                  data => {
+                    console.log("当前位置", r.point.lng, r.point.lat);
+                    if (data.addressComponents) {
+                      const result = data.addressComponents;
+                      //   console.log("result", result);
+                      const location = {
+                        //用户当前的位置
+                        creditLongitude: r.point.lat, // 经度
+                        creditLatitude: r.point.lng, // 纬度
+                        creditProvince: result.province || "", // 省
+                        creditCity: result.city || "", // 市
+                        creditArea: result.district || "", // 区
+                        creditStreet:
+                          (result.street || "") + (result.streetNumber || "") // 街道
+                      };
+                      //   console.log("location", location);
+                      _this.location = location;
+                      _this.creditLongitude = location.creditLongitude; //当前经度
+                      _this.creditLatitude = location.creditLatitude; //当前纬度
+                      _this.creditCity = location.creditCity;
+                      console.log("数据", this);
                       //  console.log("_this.creditLongitude",_this.creditLongitude,"_this.creditLatitude",_this.creditLatitude)
-                        // 获取到当前的经纬度，根据起点与终点经纬度请求百度地图的接口
-                        // _this.creditLongitude 23.1200491 _this.creditLatitude 113.30764968
-                        var url =
-                          "http://api.map.baidu.com/direction?origin=latlng:" +
-                          23.456728 +
-                          "," +
-                           113.501851+
-                          "|name:当前位置&destination=" +
-                          '惠州潼湖科技小镇'+ 
-                          "&mode=driving&region=" +
-                          "惠州市" +
-                          "&output=html&src=webapp.baidu.openAPIdemo&vt=map";
-                       // console.log("url", url);
-                        window.location.href = url
-                        //  "http://api.map.baidu.com/direction?origin=latlng:34.264642646862,108.95108518068|name:我家&destination=大雁塔&mode=driving&region=西安&output=html&src=webapp.baidu.openAPIdemo&vt=map";
-                      }
+                      // 获取到当前的经纬度，根据起点与终点经纬度请求百度地图的接口
+                      // _this.creditLongitude 23.1200491 _this.creditLatitude 113.30764968
+                      var url =
+                        "http://api.map.baidu.com/direction?origin=latlng:" +
+                        _this.creditLongitude +
+                        "," +
+                        _this.creditLatitude +
+                        "|name:当前位置&destination=" +
+                        "广州大学华软软件学院" +
+                        "&mode=driving&region=" +
+                        "广州市" +
+                        "&output=html&src=webapp.baidu.openAPIdemo&vt=map";
+                      // console.log("url", url);
+                      window.open(url, "_system");
+                      //  "http://api.map.baidu.com/direction?origin=latlng:34.264642646862,108.95108518068|name:我家&destination=大雁塔&mode=driving&region=西安&output=html&src=webapp.baidu.openAPIdemo&vt=map";
                     }
-                  );
+                  }
+                );
                 // }
               } else {
                 alert("定位失败");
@@ -548,7 +604,7 @@ export default {
         .catch(error => {
           if (error == "cancel") {
             // _this.$router.push({ path: "/home/detailHome" }).then(() => {
-              Toast("您已拒绝地理位置授权");
+            Toast("您已拒绝地理位置授权");
             // });
           } else {
             throw error;
@@ -556,10 +612,11 @@ export default {
         });
     }
   },
-  showMap(lat,lon) {//自定义了一个在浏览器上显示地理信息的函数
-      var str = "您当前位置的维度："+lat+"，经度："+lon;
-     // console.log(str)
-        // GetID.innerHTML = str;
+  showMap(lat, lon) {
+    //自定义了一个在浏览器上显示地理信息的函数
+    var str = "您当前位置的维度：" + lat + "，经度：" + lon;
+    // console.log(str)
+    // GetID.innerHTML = str;
   }
 };
 </script>

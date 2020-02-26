@@ -88,10 +88,10 @@ export const register = ({ user_name,phone_code,user_password,user_email ,user_p
     });
   }
   //获取用户信息
-  export const reqUserInfo=() =>{
+  export const reqUserInfo=(user_id) =>{
     return instance({
       method: 'get',
-      url: '/api/user/getUserInfo'
+      url: `/api/user/${user_id}`
     });
   }
 

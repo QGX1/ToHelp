@@ -9,7 +9,7 @@
         </mt-actionsheet>
         <div class="my-info clear" @click="$router.push({path:'/mine/updateInfo'})">
           <div class="pull-left my-l">
-            <img :src='userInfo.user_avatar'>
+            <img :src="userInfo.user_avatar?'http://192.168.43.177:8081/'+userInfo.user_avatar:'https://cube.elemecdn.com/9/c2/f0ee8a3c7c9638a54940382568c9dpng.png'">
           </div>
           <div class="pull-left my-m">
             <span>{{userInfo.user_name}}</span>
@@ -61,7 +61,7 @@
             id: 1,
             content: "我的收藏",
             avatar: 'icon-gongzuojingli',
-            name:'collection'
+            name:'mineCollect'
           },
           {
             id: 2,
@@ -71,9 +71,9 @@
           },
           {
             id: 3,
-            content: "我的打卡",
+            content: "我的考勤",
             avatar: 'icon-tubiaozhizuomobankuozhan-',
-            name:'mineWork '
+            name:'mineWork'
           }
         ]
       };
@@ -102,6 +102,7 @@
     // 創建后挂载到root之后调用该钩子函数
     mounted() {
       this.getUser();
+      console.log(this.userInfo)
     },
     // 该实例被创建还没挂载root之前，ajax可以在这里
     created() {}
