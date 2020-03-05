@@ -8,9 +8,9 @@ import MintUI from 'mint-ui'
 import 'mint-ui/lib/style.css'
 import './plugins/rem.js'
 import VueLazyload from 'vue-lazyload';//图片懒加载
-// import Vconsole from'vconsole';
-// // 真机调试
-// const vConsole =new Vconsole();
+import Vconsole from'vconsole';
+// 真机调试
+const vConsole =new Vconsole();
 
 // Vue.use(vConsole);
 // rem

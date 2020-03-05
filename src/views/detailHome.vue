@@ -2,7 +2,7 @@
   <div id="detailHome">
     <HeaderTop :title="user.job_post">
       <!-- title为岗位 -->
-      <div @click="$router.go(-1)" slot="left" class="left">
+      <div @click="toHome" slot="left" class="left">
         <span>
           <i class="iconfont icon-fanhui1"></i>
         </span>
@@ -32,7 +32,7 @@
             {{user.job_educat}}
           </span>
         </div>
-        <br>
+        <!-- <br> -->
       </section>
       <!-- 联系人 -->
       <section class="hr_information">
@@ -41,7 +41,7 @@
             :src="user.users.user_avatar?'http://192.168.43.177:8081/'+user.users.user_avatar:'https://cube.elemecdn.com/9/c2/f0ee8a3c7c9638a54940382568c9dpng.png'"
           >
         </div>
-        <div class="job_hr_name" >{{user.users.user_name}}</div>
+        <div class="job_hr_name">{{user.users.user_name}}</div>
         <div class="job_hr_information">
           <span style="margin: 0.3rem;">{{user.users.user_company}}</span>
           <span>
@@ -107,13 +107,15 @@
   margin: 1rem, 0.2rem, 0px, 0px;
   margin-top: -0.8rem;
   margin-right: 0.3rem;
-  .icon-shoucang2-copy{
-    color #fff;
-    font-size 0.8rem;
+
+  .icon-shoucang2-copy {
+    color: #fff;
+    font-size: 0.8rem;
   }
-  .isCollection{
-    font-size 0.8rem;
-    color #fdd741;
+
+  .isCollection {
+    font-size: 0.8rem;
+    color: #fdd741;
   }
 }
 
@@ -152,10 +154,8 @@ i.iconfont.icon-fanhui1 {
 .job_content {
   margin-top: 1rem;
   background-color: rgba(255, 255, 255, 0.64);
-  height: 15.1rem;
   overflow-x: hidden;
   overflow-y: scroll;
-  position: fixed;
   width: 100%;
   margin-bottom: 1.5rem;
 }
@@ -296,10 +296,12 @@ section.job_descript {
 }
 
 .toImmediately {
-  bottom: 0.25rem;
+  bottom: 0;
   position: fixed;
-  width: 96%;
-  left: 0.2rem;
+  width: 100%;
+  background: #fff;
+  position: fixed;
+  height: 1.3rem;
 }
 
 .ellipsis {
@@ -312,6 +314,8 @@ section.job_descript {
 .toImmediately .mint-button--primary {
   color: #fff;
   background-color: #64caaa;
+  width: 96%;
+  margin: 0 auto;
 }
 /*
     去除百度地图版权
@@ -329,8 +333,8 @@ section.job_descript {
 <script>
 import { MessageBox, Toast, Indicator } from "mint-ui";
 import HeaderTop from "../components/HeaderTop";
-import {mapState} from 'Vuex'
-import {showLoading,hideLoading} from '../api/loading';
+import { mapState } from "Vuex";
+import { showLoading, hideLoading } from "../api/loading";
 export default {
   name: "detailHome",
   components: {
@@ -349,35 +353,32 @@ export default {
       isMore: false, //显示控制
       divHeight: Number, //div初始时高度
       map2: "",
-      // location:Object,
-      // creditLongitude:Number,
-      // creditCity:String,
       job_site: "",
       lat: 0,
       lng: 0,
-      isCollection:false,
-      isCollect:false
+      isCollection: false,
+      isCollect: false
     };
   },
   created() {
     //获取路由携带的参数
     showLoading();
-    console.log(this.$route.params.job);
+    //console.log(this.$route.params.job);
     this.user = this.$route.params.job;
     this.lat = this.user.latitude;
     this.lng = this.user.longitude;
     this.job_site = this.user.job_site;
-     let value={
-      users:this.userInfo.id,
-      _id:this.user._id
-    }
-    this.getRequest(`/api/collect/`,value).then(res=>{
-      if(res.data.code==0) {
-        this.isCollection=true;
-        this.isCollect=true
-        }
+    let value = {
+      users: this.userInfo.id,
+      _id: this.user._id
+    };
+    this.getRequest(`/api/collect/`, value).then(res => {
+      if (res.data.code == 0) {
+        this.isCollection = true;
+        this.isCollect = true;
+      }
       hideLoading();
-    })
+    });
   },
   mounted() {
     this.divHeight = 0;
@@ -386,51 +387,52 @@ export default {
     this.addMapControl(); //向地图添加控件
     this.addMapOverlay(); //向地图添加覆盖物
   },
-  computed:{
-    ...mapState(['userInfo'])
+  computed: {
+    ...mapState(["userInfo"])
   },
-  beforeRouteLeave (to, from, next){
-    console.log('路由离开');
-    if(this.isCollect==this.isCollection){
+  beforeRouteLeave(to, from, next) {
+    hideLoading();
+    if (this.isCollect == this.isCollection) {
       // 表示用户没有对初始化的收藏按钮进行操作
-      console.log('没有进行操作')
-      next();//直接进行跳转
-    }else{
+      next(); //直接进行跳转
+    } else {
       // 用户进行了操作，调用数据
-      console.log("修改")
-      this.DataCollect(this.isCollection)
+      this.DataCollect(this.isCollection);
       next();
     }
   },
+  watch: {},
   methods: {
+    toHome() {
+      hideLoading();
+      this.$router.go(-1);
+    },
     // 将添加或删除收藏存入数据库
-    DataCollect(value){
-      let collectData={
-        users:this.userInfo.id,
-        _id:this.user._id
+    DataCollect(value) {
+      let collectData = {
+        users: this.userInfo.id,
+        _id: this.user._id
       };
-      if(value){
-        console.log("添加")
-        this.postRequest('/api/collect/addCollect',collectData).then(res=>{
+      if (value) {
+       // console.log("添加");
+        this.postRequest("/api/collect/addCollect", collectData).then(res => {
           //Toast(res.data.msg);
           console.log(res);
-        }) 
-      }else{
-        console.log("取消")
-        this.deleteRequest('/api/collect/deleteCollect2',collectData).then(res=>{
-          //Toast(res.data.msg);
-          console.log(res);
-          
-        })
+        });
+      } else {
+        this.deleteRequest("/api/collect/deleteCollect2", collectData).then(
+          res => {
+          }
+        );
       }
     },
     // 添加收藏
-    addCollection(){
-      this.isCollection=!this.isCollection;
-      if(this.isCollection){
-        Toast('已收藏')
-      }else{
-        Toast('取消收藏')
+    addCollection() {
+      this.isCollection = !this.isCollection;
+      if (this.isCollection) {
+        Toast("已收藏");
+      } else {
+        Toast("取消收藏");
       }
     },
     //创建地图
@@ -448,7 +450,7 @@ export default {
     //设置地图事件
     addClickHandler() {
       // 事件监听，路由跳转
-      this.$options.methods.getCity();
+      this.getCity().call(this);
       this.$options.methods.createMap(); //创建地图
       this.$options.methods.setMapEvent(); //设置地图事件
       this.$options.methods.addMapControl(); //向地图添加控件
@@ -512,6 +514,7 @@ export default {
     },
     // 跳转到百度地图
     getCity() {
+      let that = this;
       let _this = this;
       MessageBox.confirm("", {
         title: "提示",
@@ -574,7 +577,7 @@ export default {
                       _this.creditLongitude = location.creditLongitude; //当前经度
                       _this.creditLatitude = location.creditLatitude; //当前纬度
                       _this.creditCity = location.creditCity;
-                      console.log("数据", this);
+                      console.log("数据", that);
                       //  console.log("_this.creditLongitude",_this.creditLongitude,"_this.creditLatitude",_this.creditLatitude)
                       // 获取到当前的经纬度，根据起点与终点经纬度请求百度地图的接口
                       // _this.creditLongitude 23.1200491 _this.creditLatitude 113.30764968
@@ -584,14 +587,15 @@ export default {
                         "," +
                         _this.creditLatitude +
                         "|name:当前位置&destination=" +
-                        "广州大学华软软件学院" +
+                        that.job_site +
                         "&mode=driving&region=" +
                         "广州市" +
                         "&output=html&src=webapp.baidu.openAPIdemo&vt=map";
                       // console.log("url", url);
-                      window.open(url, "_system");
+                      // this.$options.methods.toWhite(url)
                       //  "http://api.map.baidu.com/direction?origin=latlng:34.264642646862,108.95108518068|name:我家&destination=大雁塔&mode=driving&region=西安&output=html&src=webapp.baidu.openAPIdemo&vt=map";
-                    }
+                      window.open(url, "_system")
+                   }
                   }
                 );
                 // }

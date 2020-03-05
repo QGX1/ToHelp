@@ -81,13 +81,11 @@ export default {
         removeImage(index){
             this.imgList.splice(index, 1);
             this.imgSrcList.splice(index, 1);
-            console.log('www',this.imgSrcList)
         },
         // 上传图片到服务端
         async _getFileCode(obj){
             console.log(obj)
-            let result = await uploadImg(obj)
-            // console.log("result",result.data)
+            let result = await uploadImg(obj);
             return  result.data;
         }
     },

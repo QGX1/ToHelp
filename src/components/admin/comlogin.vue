@@ -103,7 +103,7 @@ export default {
                              // 路由跳转到首页
                                 let redirectUrl = decodeURIComponent(that.$route.query.redirect || '/home');
                              // 跳转到指定的路由
-                                that.$router.push({
+                                that.$router.replace({
                                     path: redirectUrl
                                 })
                             that.getCaptchaCode()//刷新验证码

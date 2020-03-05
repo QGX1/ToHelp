@@ -19,6 +19,7 @@
 import HeaderTop from "../components/HeaderTop";
 import {mapState} from 'Vuex';
 import {updateUserInfo} from '../api/index'
+import { Toast } from "mint-ui";
 export default {
   name: "updateUserName",
   components: {
@@ -39,7 +40,7 @@ export default {
       async submit(){
         let resUpdata=await updateUserInfo(this.userInfo);
         // 弹出提示框，修改成功
-       // console.log(resUpdata)
+        Toast('姓名修改成功')
       }
   },
 };
