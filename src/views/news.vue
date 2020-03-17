@@ -55,7 +55,7 @@ export default {
             hideLoading()//隐藏加载框
         });
         WSocket.init(
-            {user:this.user_id},
+            {user:this.userInfo.id},
             message=>{
                 this.setMsgCount(message);
             },
@@ -106,16 +106,13 @@ export default {
         async getFriendsList(value){
             let newUser=value;
             await getMsgRecord(newUser).then(res=>{
-                console.log(222,res)
                 this.friendsList=res.data.msg;
                 this.allFriends=res.data.msg;
-                console.log('eee',this.friendsList);
                 return 1;
             })
         },
         filterData(){
             this.friendsList=this.allFriends.filter(item=>{
-                // console.log(333,item)
                 return item.target_users.user_name.indexOf(this.search_value) !=-1
             })
         },

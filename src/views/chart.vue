@@ -8,11 +8,11 @@
                     <i class="iconfont icon-fanhui1"></i>
                 </span>
             </div>
-            <router-link slot="right" class="writeDynamic" to="/writeDynamic">
+            <div slot="right" class="writeDynamic" @click.stop="toComplaint">
                 <span>
                     <i class="iconfont icon-gengduo"></i>
                 </span>
-            </router-link>
+            </div>
         </HeaderTop>
         <!-- 显示聊天记录 -->
         <div
@@ -92,9 +92,10 @@ export default {
     // console.log('mkmk',this.msgRecordList)
     this.user_id = this.userInfo._id ? this.userInfo._id : this.userInfo.id;
     WSocket.init(
-      { user: this.user_id },
+      { user: this.userInfo.id },
       message => {
         // 收到消息后，判断用户列表中是否存在该用户
+        console.log('接收到数据')
         if (this.user_id != message.from) {
           this.msgRecordList.push({
             infor_msg: message.msg,
@@ -119,6 +120,10 @@ export default {
     }
   },
   methods: {
+    // 跳转到投诉页面
+    toComplaint(){
+      this.$router.push({name:'complaint',params:{targetUser:this.targetUser}})
+    },
     cancelCom() {
       // console.log('popo');
       if (this.user_id == this.firse_user_id) {

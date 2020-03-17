@@ -42,12 +42,15 @@
           >
         </div>
         <div class="job_hr_name">{{user.users.user_name}}</div>
-        <div class="job_hr_information">
+        <div :class="user.job_nature?'job_hr_information2':'job_hr_information'">
           <span style="margin: 0.3rem;">{{user.users.user_company}}</span>
           <span>
             <!-- <i class="iconfont icon-dian"></i> -->
           </span>
           <span>{{user.users.user_company_position}}</span>
+        </div>
+        <div class="job_hr_img" style="position: absolute;right: 0.2rem;" v-if='user.job_nature'>
+          <img src='../assets/images/p3.png'>
         </div>
       </section>
       <section class="job_descript">
@@ -246,7 +249,12 @@ img {
 
 .job_hr_information {
   color: rgba(0, 9, 16, 0.749);
-  margin-left: -1.6rem;
+  margin-left: -1.3rem;
+  margin-top: 1.1rem;
+}
+.job_hr_information2 {
+  color: rgba(0, 9, 16, 0.749);
+  margin-left: -0.8rem;
   margin-top: 1.1rem;
 }
 

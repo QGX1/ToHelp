@@ -72,7 +72,7 @@ export default {
         right:0px;
         bottom:0px;
         .loginInner
-            padding-top 20%
+            padding-top 15%
             width 80%
             text-align center
             margin 0 auto

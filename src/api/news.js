@@ -13,7 +13,6 @@ export const getFriends=()=>{
 }
 // 获取所有消息记录
 export const getMsgRecord=(user_id)=>{
-    console.log(444)
     return instance({
         method:'GET',
         url:`/api/infor/msg/${user_id}`
@@ -22,7 +21,6 @@ export const getMsgRecord=(user_id)=>{
 
 // 保存消息记录
 export const saveInfoRecord=(value)=>{
-    console.log(444,value)
     return instance({
         method:'POST',
         url:`/api/infor/addInfor`,
@@ -31,7 +29,6 @@ export const saveInfoRecord=(value)=>{
 }
 // 修改消息记录
 export const updateInfoRecord=(value)=>{
-    console.log(444,value)
     return instance({
         method:'PUT',
         url:`/api/infor/updateMsg`,

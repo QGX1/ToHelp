@@ -40,20 +40,6 @@
             </div>
             <div v-show="allLoaded" class="page-infinite-loading">已全部加载</div>
         </div>
-        <!-- <ul class="mui-table-view" v-inf sainite-scroll="loadMore" infinite-scroll-disabled="moreLoading" infinite-scroll-distance="0" infinite-scroll-immediate-check="false"> -->
-        <!--li数据遍历循环部分-->
-        <!-- <li class="mui-table-view-cell" v-for="item in list">
-                <a class="mui-navigate-right">
-                <span class="mui-pull-left">{{item.name}}</span>
-                <span class="mui-pull-right">{{item.date.substring(0,10)}}</span>
-                </a>
-        </li>-->
-        <!--底部判断是加载图标还是提示“全部加载”-->
-        <!-- <li class="more_loading" v-show="!queryLoading">
-                <mt-spinner type="snake" color="#00ccff" :size="20" v-show="moreLoading&&!allLoaded"></mt-spinner>
-                <span v-show="allLoaded">已全部加载</span>
-            </li>
-        </ul>-->
     </div>
 </template>
 
@@ -217,6 +203,7 @@ export default {
         console.log(res);
         this.list = res.data.msg;
         this.totalNum = res.data.total;
+        if(this.list.length==this.totalNum) this.allLoaded=true;
       });
     },
     // 路由跳转
@@ -225,10 +212,11 @@ export default {
     },
     //无限加载函数
     loadMore() {
-      //console.log("加载222");
+      console.log("加载222");
       this.allLoaded = this.list.length == this.totalNum;
+      console.log(44,this.allLoaded);
       if (this.allLoaded) {
-        this.moreLoading = true;
+        this.moreLoading = false;
         return;
       }
       if (this.queryLoading) return; //加载查询

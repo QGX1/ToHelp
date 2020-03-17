@@ -252,7 +252,7 @@ export default {
     height: 100%;
     text-align: center;
     margin: 0 auto;
-
+    overflow-y: scroll;
     .register_form {
         margin-top: 10px;
     }

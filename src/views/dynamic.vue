@@ -10,7 +10,7 @@
         <div class="issue mui-table-view" 
             v-infinite-scroll="loadMore" infinite-scroll-disabled="true" 
             infinite-scroll-distance="0" infinite-scroll-immediate-check="false">
-            <div class="userIssue" v-for="(item,index) of dynamicLists2" :key="item._id">
+            <div class="userIssue" v-for="(item,index) of dynamicLists2" :key="index">
                 <div class="userAvatar">
                     <img 
                     :src="item.users.user_avatar?'http://192.168.43.177:8081/'+item.users.user_avatar:'https://cube.elemecdn.com/9/c2/f0ee8a3c7c9638a54940382568c9dpng.png'"

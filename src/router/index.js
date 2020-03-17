@@ -71,6 +71,16 @@ const router = new VueRouter({
     }
   },
   {
+    // 投诉
+    path: "/complaint",
+    name: "complaint",
+    component: ()=>import ('../views/complaint'),
+    meta:{
+      showFooter:false,
+      requiresAuth:true
+    }
+  },
+  {
     // 写动态
     path: "/writeDynamic",
     name: "WriteDynamic",
