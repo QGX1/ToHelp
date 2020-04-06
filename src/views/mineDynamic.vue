@@ -26,7 +26,7 @@
                 :key="item._id">
                 <div class="userAvatar">
                     <img 
-                    :src="item.users.user_avatar?'http://192.168.43.177:8081/'+item.users.user_avatar:'https://cube.elemecdn.com/9/c2/f0ee8a3c7c9638a54940382568c9dpng.png'"
+                    :src="item.users.user_avatar?'http://39.101.193.187:8080/pictures/'+item.users.user_avatar:'https://cube.elemecdn.com/9/c2/f0ee8a3c7c9638a54940382568c9dpng.png'"
                      alt="用户头像"> 
                 </div>
                 <div class="userJoinContent"> 
@@ -35,7 +35,7 @@
                         <article>
                             <div>{{item.dynamic_text}}</div>
                             <div class="jobImg" >
-                                <img v-for='(items,index) in item.dynamic_imgs ' :key='index' v-lazy="'http://192.168.43.177:8081/'+items"
+                                <img v-for='(items,index) in item.dynamic_imgs ' :key='index' v-lazy="'http://39.101.193.187:8080/pictures/'+items"
                                 :class='item.dynamic_imgs.length==1?"kbimgbox0":"kbimgbox1"'
                                 :preview='item.dynamic_imgs'
                                 :preview-text='item.dynamic_text'
@@ -130,7 +130,7 @@
 <script>
 import {mapState,mapActions} from 'Vuex';
 import HeaderTop from "../components/HeaderTop";
-import SendComment2 from "../components/comment/sendComment2";
+import SendComment from "../components/comment/sendComment";
 import {addLike,deleteLike,getMineDynamic,deleteMineDynamic} from '../api/index'
 import Vue from "vue";
 import { MessageBox } from 'mint-ui';
@@ -140,7 +140,7 @@ export default {
     inject:['reload'],//注入依赖
     components:{
         HeaderTop,
-        SendComment:SendComment2
+        SendComment:SendComment
     },
     data() {
         return {

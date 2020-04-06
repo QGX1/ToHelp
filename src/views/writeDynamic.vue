@@ -5,7 +5,7 @@
                 <span>
                     <i class="iconfont icon-fanhui1"></i>
                 </span>
-                <span class="titleText2">发表动态</span>
+                <span class="titleText2">发表分享</span>
            </router-link>
            <div slot="right">
                <input type='button' class="commentBtn" :class="{commentBtn2:commentBtn2}" @click="sendDynamic" value="发表">
@@ -50,7 +50,7 @@ export default {
                     user_id:this.userInfo.id?this.userInfo.id:this.userInfo._id,
                 }
                 let result= await uploadDynamic(value).then(res=>{
-                    console.log(111,res)
+                  //  console.log(111,res)
                     if(res.data.code==0){
                         this.$router.push({name:'Dynamic'})
                         hideLoading()
@@ -84,7 +84,7 @@ export default {
         },
         // 上传图片到服务端
         async _getFileCode(obj){
-            console.log(obj)
+           // console.log(obj)
             let result = await uploadImg(obj);
             return  result.data;
         }

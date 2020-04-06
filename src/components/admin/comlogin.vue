@@ -20,7 +20,7 @@
                 </section>
                 <section class="login_message">
                     <el-input type="text" maxlength="11" placeholder="验证码" v-model="captcha"></el-input>
-                    <img ref="captcha" class="get_verification" src=" http://192.168.43.177:5001/api/user/verify" @click="getCaptchaCode">
+                    <img ref="captcha" class="get_verification" src="http://39.101.193.187:5001/api/user/verify" @click="getCaptchaCode">
                 </section>
             </div>
             <input type="submit" value="登录" class="login_submit">
@@ -121,7 +121,7 @@ export default {
         },
         // 点击获取验证码
         getCaptchaCode(){
-            this.$refs.captcha.src=' http://192.168.43.177:5001/api/user/verify?time='+new Date();
+            this.$refs.captcha.src='http://39.101.193.187:5001/api/user/verify?time='+new Date();
         }
 
     },

@@ -127,7 +127,7 @@ export default {
             reader.readAsDataURL(item); //转换，参数必须是blob对象
             tempList.push(fileItem);
             this.files.push(fileItem);
-            console.log(this.files);
+            // console.log(this.files);
           }
         });
         // 向父组件发射事件

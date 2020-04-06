@@ -1,7 +1,5 @@
 import Axios from 'axios';
 import router from '../router'
-import * as types from '../store/module.js/types'
-import vuex from '../store'
 import Qs from 'qs'
 // 设置跨域请求
 if(window.sessionStorage.getItem('token')){
@@ -17,7 +15,7 @@ export let instance = Axios.create({
       "content-type": "application/x-www-form-urlencoded",
       'Authorization':window.sessionStorage.getItem('token')//指令
     },
-     baseURL: ""
+     baseURL: "http://39.101.193.187:5001/"
   });
 
 //使用 respone 拦截器，对 2xx 状态码以外的结果进行拦截。

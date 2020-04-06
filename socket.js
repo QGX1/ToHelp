@@ -6,7 +6,7 @@ export default {
         // console.log(config)
         if (!this.ws) {
             // 不存在ws,则实例化webSocket,ws://192.168.43.177连接谁，是谁跟我建立通讯
-            this.ws = new WebSocket(`ws://192.168.43.177:3030/${config.user}`)
+            this.ws = new WebSocket(`ws://39.101.193.187:3030//${config.user}`)
         }
         // 客户端接收消息
         console.log('jkjk', onMessage)

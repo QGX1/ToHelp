@@ -3,8 +3,6 @@ import VueRouter from "vue-router";
 import Home from "../views/home.vue";
 import DetailHome from "../views/detailHome.vue";
 import PathMap from "../views/pathMap.vue";
-import Calendar from "../views/calendar.vue";
-import ClockIn from "../views/clockIn.vue";
 import Dynamic from "../views/dynamic.vue";
 import WriteDynamic from "../views/writeDynamic.vue";
 import News from "../views/news.vue";

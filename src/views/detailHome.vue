@@ -19,7 +19,7 @@
           <div class="job_salary">{{user.job_salary}}</div>
         </div>
         <div class="job_sist">
-          <span>
+          <span class="ellipsis textlimit">
             <i class="iconfont icon-weizhi"></i>
             {{user.job_site}}
           </span>
@@ -38,7 +38,7 @@
       <section class="hr_information">
         <div class="job_hr_img">
           <img
-            :src="user.users.user_avatar?'http://192.168.43.177:8081/'+user.users.user_avatar:'https://cube.elemecdn.com/9/c2/f0ee8a3c7c9638a54940382568c9dpng.png'"
+            :src="user.users.user_avatar?'http://39.101.193.187:8080/pictures/'+user.users.user_avatar:'https://cube.elemecdn.com/9/c2/f0ee8a3c7c9638a54940382568c9dpng.png'"
           >
         </div>
         <div class="job_hr_name">{{user.users.user_name}}</div>
@@ -49,8 +49,8 @@
           </span>
           <span>{{user.users.user_company_position}}</span>
         </div>
-        <div class="job_hr_img" style="position: absolute;right: 0.2rem;" v-if='user.job_nature'>
-          <img src='../assets/images/p3.png'>
+        <div class="job_hr_img" style="position: absolute;right: 0.2rem;" v-if="user.job_nature">
+          <img src="../assets/images/p3.png">
         </div>
       </section>
       <section class="job_descript">
@@ -213,7 +213,6 @@ section.job_information {
   float: left;
   text-align: center;
   color: rgba(8, 8, 10, 0.82);
-  height: 0.4rem;
   font-size: 0.3rem;
   margin-right: 0.4rem;
 }
@@ -252,6 +251,7 @@ img {
   margin-left: -1.3rem;
   margin-top: 1.1rem;
 }
+
 .job_hr_information2 {
   color: rgba(0, 9, 16, 0.749);
   margin-left: -0.8rem;
@@ -317,6 +317,11 @@ section.job_descript {
   overflow: hidden;
   text-overflow: ellipsis;
 }
+.textlimit{
+  width 50%;
+  display block;
+}
+
 </style>
 <style scoped>
 .toImmediately .mint-button--primary {
@@ -422,16 +427,16 @@ export default {
         _id: this.user._id
       };
       if (value) {
-       // console.log("添加");
+        // console.log("添加");
         this.postRequest("/api/collect/addCollect", collectData).then(res => {
           //Toast(res.data.msg);
-          console.log(res);
+          //console.log(res);
         });
       } else {
-        this.deleteRequest("/api/collect/deleteCollect2", collectData).then(
-          res => {
-          }
-        );
+        this.deleteRequest(
+          "/api/collect/deleteCollect2",
+          collectData
+        ).then(res => {});
       }
     },
     // 添加收藏
@@ -602,8 +607,8 @@ export default {
                       // console.log("url", url);
                       // this.$options.methods.toWhite(url)
                       //  "http://api.map.baidu.com/direction?origin=latlng:34.264642646862,108.95108518068|name:我家&destination=大雁塔&mode=driving&region=西安&output=html&src=webapp.baidu.openAPIdemo&vt=map";
-                      window.open(url, "_system")
-                   }
+                      window.open(url, "_system");
+                    }
                   }
                 );
                 // }

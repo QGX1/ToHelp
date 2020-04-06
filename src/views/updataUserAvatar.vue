@@ -1,33 +1,33 @@
 <template>
-    <div id="updateUserAvatar">
-        <HeaderTop title="修改个人头像">
-            <!-- title为岗位 -->
-            <router-link slot="left" class="left" to="/mine/updateInfo">
-                <span>
-                    <i class="iconfont icon-fanhui1"></i>
-                </span>
-            </router-link>
-            <div slot="right" class="right" @click="toMore">
-                <i class="iconfont icon-gengduo"></i>
-            </div>
-        </HeaderTop>
-        <div class="userAvatar">
-            <img :src="imgUrl" style="width: 80%;" id="img">
-        </div>
-        <div class="mineCell">
-            <!-- <mt-button @click.native="flag = true" size="large">选择用户头像</mt-button> -->
-            <mt-actionsheet :actions="actions" v-model="userStatusVisible"></mt-actionsheet>
-            <!-- 修改头像选择框 -->
-            <input
-                type="file"
-                ref="fileInput"
-                class="file"
-                accept="image/*"
-                @change="change($event)"
-                style="display: none"
-            >
-        </div>
+  <div id="updateUserAvatar">
+    <HeaderTop title="修改个人头像">
+      <!-- title为岗位 -->
+      <router-link slot="left" class="left" to="/mine/updateInfo">
+        <span>
+          <i class="iconfont icon-fanhui1"></i>
+        </span>
+      </router-link>
+      <div slot="right" class="right" @click="toMore">
+        <i class="iconfont icon-gengduo"></i>
+      </div>
+    </HeaderTop>
+    <div class="userAvatar">
+      <img :src="imgUrl" style="width: 80%;" id="img">
     </div>
+    <div class="mineCell">
+      <!-- <mt-button @click.native="flag = true" size="large">选择用户头像</mt-button> -->
+      <mt-actionsheet :actions="actions" v-model="userStatusVisible"></mt-actionsheet>
+      <!-- 修改头像选择框 -->
+      <input
+        type="file"
+        ref="fileInput"
+        class="file"
+        accept="image/*"
+        @change="change($event)"
+        style="display: none"
+      >
+    </div>
+  </div>
 </template>
 
 <script>
@@ -70,11 +70,15 @@ export default {
     //console.log(this.userInfo)
     //   console.log(this.$route.params)
     this.imgUrl = this.userInfo.user_avatar
-      ? "http://192.168.43.177:8081/" + this.userInfo.user_avatar
+      ? "http://39.101.193.187:8080/pictures/" + this.userInfo.user_avatar
       : "https://cube.elemecdn.com/9/c2/f0ee8a3c7c9638a54940382568c9dpng.png";
   },
   computed: {
     ...mapState(["userInfo"])
+  },
+  beforeRouteLeave(to, from, next) {
+    hideLoading();
+    next();
   },
   methods: {
     toMore() {
@@ -271,9 +275,9 @@ export default {
 
         //判断图片是否大于100k,不大于直接上传，反之压缩
         // if (imgData.length < 100 * 1024) {
-          self.resultObj.src = imgData;
-          //图片上传
-          self.postImg(imgData);
+        self.resultObj.src = imgData;
+        //图片上传
+        self.postImg(imgData);
         // } else {
         //   image.onload = function() {
         //     //压缩处理
@@ -320,15 +324,18 @@ export default {
     },
     //图片上传
     postImg(imageData) {
-      console.log("图片上传",imageData);
+      console.log("图片上传", imageData);
       // 进行上传图片
       showLoading();
       this.postRequest("/api/sendImg/uploadImg", {
         Base64Str: imageData.split("base64,")[1]
       }).then(res => {
-          console.log(333,res.data.code)
+        console.log(333, res.data.code);
         if (res.data.code == 0) {
-          this.putRequest("/api/user/updataAvatar",{user_avatar:res.data.imgSrc,_id:this.userInfo.id}).then(res => {
+          this.putRequest("/api/user/updataAvatar", {
+            user_avatar: res.data.imgSrc,
+            _id: this.userInfo.id
+          }).then(res => {
             if (res.data.code == 0) {
               hideLoading();
               Toast({
@@ -338,8 +345,8 @@ export default {
             }
           });
         } else {
-             hideLoading();
-              Toast("图片上传失败");
+          hideLoading();
+          Toast("图片上传失败");
         }
       });
       //这边写图片的上传
@@ -405,7 +412,7 @@ export default {
     },
     //图片压缩
     compress(img, Orientation) {
-        console.log(img,Orientation)
+      console.log(img, Orientation);
       let canvas = document.createElement("canvas");
       let ctx = canvas.getContext("2d");
       //瓦片canvas
@@ -500,64 +507,64 @@ export default {
       } else {
         obj.detachEvent("on" + type, fn);
       }
-    },
+    }
   }
 };
 </script>
 <style lang="stylus" scoped>
 .updateUserAvatar {
-    margin-top: 1.6rem;
+  margin-top: 1.6rem;
 }
 
 .inputName {
-    background-color: white;
-    font-size: 0.5rem;
-    width: 90%;
-    border: 1px solid #ccc;
-    height: 1.5rem;
-    text-align: left;
-    padding-left: 0.5rem;
-    border-radius: 0.2rem;
-    margin: 0rem auto;
-    display: block;
+  background-color: white;
+  font-size: 0.5rem;
+  width: 90%;
+  border: 1px solid #ccc;
+  height: 1.5rem;
+  text-align: left;
+  padding-left: 0.5rem;
+  border-radius: 0.2rem;
+  margin: 0rem auto;
+  display: block;
 }
 
 .userNameSubmit {
-    margin-top: 0.5rem;
-    height: 1.5rem;
-    width: 90%;
-    border-radius: 0.2rem;
-    font-size: 0.6rem;
+  margin-top: 0.5rem;
+  height: 1.5rem;
+  width: 90%;
+  border-radius: 0.2rem;
+  font-size: 0.6rem;
 }
 
 .canUserNameSubmit {
-    margin-top: 0.5rem;
-    height: 1.5rem;
-    width: 90%;
-    border-radius: 0.2rem;
-    font-size: 0.6rem;
-    background: linear-gradient(to bottom, #5bc5a4 0%, #a1d4c7 100%);
+  margin-top: 0.5rem;
+  height: 1.5rem;
+  width: 90%;
+  border-radius: 0.2rem;
+  font-size: 0.6rem;
+  background: linear-gradient(to bottom, #5bc5a4 0%, #a1d4c7 100%);
 }
 
 .right {
-    float: right;
-    margin-top: -0.6rem;
-    margin-right: 0.2rem;
-    width: 1rem;
-    height: 1rem;
+  float: right;
+  margin-top: -0.6rem;
+  margin-right: 0.2rem;
+  width: 1rem;
+  height: 1rem;
 }
 
 .icon-gengduo {
-    font-size: 0.6rem;
-    color: #fff;
+  font-size: 0.6rem;
+  color: #fff;
 }
 
 .userAvatar {
-    width: 100%;
-    position: fixed;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
+  width: 100%;
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
 }
 </style>
 

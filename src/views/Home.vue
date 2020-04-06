@@ -17,7 +17,7 @@
                         </div>
                         <div class="job_company ellipsis">{{item.users.user_company}}</div>
                         <div class="job_sist">
-                            <span>{{item.job_site}}</span>
+                            <span class="ellipsis textlimit">{{item.job_site}}</span>
                             <span>{{item.job_ask_for}}</span>
                             <span>{{item.job_educat}}</span>
                         </div>
@@ -25,7 +25,7 @@
                     <section class="hr_information">
                         <div class="job_hr_img">
                             <img
-                                :src="item.users?'http://192.168.43.177:8081/'+item.users.user_avatar:'https://cube.elemecdn.com/9/c2/f0ee8a3c7c9638a54940382568c9dpng.png'"
+                                :src="item.users?'http://39.101.193.187:8080/pictures/'+item.users.user_avatar:'https://cube.elemecdn.com/9/c2/f0ee8a3c7c9638a54940382568c9dpng.png'"
                             >
                         </div>
                         <div
@@ -151,7 +151,10 @@ img {
     font-weight: 400;
     color: #000910bf;
 }
-
+.textlimit{
+  width 50%;
+  display block;
+}
 .ellipsis {
     white-space: nowrap;
     overflow: hidden;

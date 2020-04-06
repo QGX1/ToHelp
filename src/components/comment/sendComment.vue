@@ -2,7 +2,7 @@
     <div id="sendComment">
         <section>
             <input type="text" class="commentText" placeholder="评论" v-model="commentText">
-            <input type='button' class="commentBtn" :class="{commentBtn2:commentBtn2}" @click="sendCom" value="发送">
+            <input type='button' class="commentBtn" :class="{commentBtn2:commentBtn2}" @click="sendCom" value="评论">
         </section>
     </div>
 </template>
@@ -22,7 +22,7 @@ export default {
         }
     },
     mounted(){
-        console.log(111,this.reply)
+        console.log(111,this.userInfo)
     },
     methods:{
         async sendCom(){
@@ -37,9 +37,9 @@ export default {
                         comment_reply_name:this.reply?this.reply.comment_reply_name:undefined
                     }
                 };
-                console.log(333,value)
+                // console.log(333,value)
                 let result=await addComment(value).then(res=>{
-                    this.$emit('hideShow',{showComment:false})
+                    this.$emit('hideShow',{value})
                     this.commentText=''
                 })
             }
@@ -63,30 +63,27 @@ export default {
 
 <style lang="stylus" scoped>
     #sendComment{
-        height: 1.5rem;
-        position: fixed;
-        bottom: 0rem;
+        height: 1.2rem;
         background-color: #f7f7f7;
         width: 100%;
     } 
         .commentText
-            height: 1rem;
+            height: 0.8rem;
             border-radius: 0.1rem;
-            float: left;
-            margin-top: 0.2rem;
-            margin-left: 0.5rem;
+            margin-top: 0.1rem;
+            margin-left: 0.2rem;
             width: 75%;
             font-size: 0.4rem;
+            display: inline-block;
         .commentBtn
-            height: 1rem;
+            height: 0.8rem;
             border-radius: 0.1rem;
-            float: left;
             margin-top: 0.2rem;
             margin-left: 0.3rem;
             width: 15%;
-            background-color: rgb(247,247,247);
-            border: 1px solid rgb(228,228,228);
-            color: rgb(221,221,221);
+            background-color: #f7f7f7;
+            border: 1px solid #e4e4e4;
+            color: #ddd;
             font-size: 0.4rem;
         .commentBtn2
             background-color: #1fb385fc;

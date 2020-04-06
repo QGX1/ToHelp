@@ -7,7 +7,7 @@
                 </div>
                 <div class="timeline-img">
                     <img style="border-radius: 50%;border: 2px solid #95b0b0;background: pink;height: 1.5rem;width: 1.5rem;" 
-                    username="Xian" :src="item.users.user_avatar?'http://192.168.43.177:8081/'+item.users.user_avatar:'https://cube.elemecdn.com/9/c2/f0ee8a3c7c9638a54940382568c9dpng.png'"
+                    username="Xian" :src="item.users.user_avatar?'http://39.101.193.187:8080/pictures/'+item.users.user_avatar:'https://cube.elemecdn.com/9/c2/f0ee8a3c7c9638a54940382568c9dpng.png'"
                     >
                 </div>
                 <div class="timeline-content">

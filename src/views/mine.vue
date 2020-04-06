@@ -9,11 +9,11 @@
         </mt-actionsheet>
         <div class="my-info clear" @click="$router.push({path:'/mine/updateInfo'})">
           <div class="pull-left my-l">
-            <img :src="userInfo.user_avatar?'http://192.168.43.177:8081/'+userInfo.user_avatar:'https://cube.elemecdn.com/9/c2/f0ee8a3c7c9638a54940382568c9dpng.png'">
+            <img :src="userInfo.user_avatar?'http://39.101.193.187:8080/pictures/'+userInfo.user_avatar:'https://cube.elemecdn.com/9/c2/f0ee8a3c7c9638a54940382568c9dpng.png'">
           </div>
           <div class="pull-left my-m">
             <span>{{userInfo.user_name}}</span>
-            <span>在职-{{userInfo.user_incumbency===1?'随时到岗':'在职'}}</span>
+            <span>在职状态-{{userInfo.user_incumbency===1?'随时到岗':'在职'}}</span>
           </div>
           <div class="pull-right my-r">
             <div class="clear">
