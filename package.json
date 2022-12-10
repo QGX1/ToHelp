@@ -17,7 +17,7 @@
     "jquery": "^3.4.1",
     "lib-flexible": "^0.3.2",
     "mint-ui": "^2.2.13",
-    "qs": "^6.9.1",
+    "qs": "^6.5.3",
     "vue": "^2.6.10",
     "vue-photo-preview": "^1.1.3",
     "vue-router": "^3.1.3",
